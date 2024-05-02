@@ -24,7 +24,9 @@ export async function getDocuments<T extends object>(
   try {
     const result = await getDocs(collectionRef);
     const docs = result.docs
-      .map<T | undefined>((d) => (d.exists() ? (d.data() as T) : undefined))
+      .map<T | undefined>((d) =>
+        d.exists() ? ({ ...d.data(), id: d.id } as T) : undefined
+      )
       .filter<T>((d): d is T => d != null);
 
     return docs;

@@ -33,7 +33,10 @@ export default async function Deliveries() {
   return (
     <TemplatePage title='Deliveries' rightButton={<Create />}>
       {Object.entries(byMonth).map(([month, deliveryItems], index) => (
-        <div className='pb-4' key={index}>
+        <div
+          className='p-4 border-b-4 mx-[-16px] last:border-none border-darkest-blue'
+          key={index}
+        >
           <div className='flex justify-between gap-4'>
             <h2>{month}</h2>
             <p>

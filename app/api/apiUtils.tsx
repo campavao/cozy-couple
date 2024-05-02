@@ -20,7 +20,7 @@ export const getUserId = cache(async (): Promise<UserId> => {
 });
 
 // GETTERS
-export const getDeliveries = cache(async () => {
+export const getDeliveries = async () => {
   const userId = await getUserId();
   const deliveries = await getDocuments<Delivery>(
     "deliveries",
@@ -29,7 +29,7 @@ export const getDeliveries = cache(async () => {
     userId
   );
   return deliveries;
-});
+};
 
 export const getDelivery = cache(async (id: string) => {
   const item = await getDocument("deliveries", id);
@@ -66,7 +66,6 @@ export const getPickup = cache(async (id: string) => {
 // UPSERTERS
 export async function upsertDelivery(delivery: Partial<Delivery>) {
   const userId = await getUserId();
-  console.log(delivery);
   const id = delivery?.id ?? getRandomId();
   await upsertDocument("deliveries", id, { ...delivery, userId });
 }

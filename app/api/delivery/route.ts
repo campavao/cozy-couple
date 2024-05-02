@@ -14,3 +14,4 @@ export async function POST(request: Request) {
 
   return new NextResponse("Success", { status: 200 });
 }
+

@@ -11,6 +11,10 @@ export interface Delivery extends Common {
   phone: string;
   name: string;
   deliveryDate: string;
+  deliveryWindow: {
+    from: string;
+    to: string;
+  };
   source: string;
 }
 
