@@ -17,6 +17,7 @@
     "auth": "^0.0.9",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "copy-to-clipboard": "^3.3.3",
     "firebase": "^10.9.0",
     "lucide-react": "^0.368.0",
     "next": "14.0.3",

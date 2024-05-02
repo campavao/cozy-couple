@@ -10,6 +10,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { CopyButton } from "./copy-button";
 
 export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
   return (
@@ -24,9 +25,9 @@ export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
         <div className='flex flex-col items-center w-full'>
           <div className='flex flex-col gap-2 w-full max-w-md p-6'>
             <p>
-              <strong>Address:</strong> {delivery.address}
+              <strong>Address:</strong> <CopyButton text={delivery.address} />
             </p>
-            <a href={`tel:+${delivery.phone}`} type='tel'>
+            <a href={`tel:${delivery.phone}`} type='tel'>
               <strong>Phone:</strong> {delivery.phone ?? "None"}
             </a>
             <p>
@@ -35,7 +36,7 @@ export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
             <p>
               <strong>Delivery Date:</strong> {delivery.deliveryDate ?? "None"}
             </p>
-            <p>{delivery.description}</p>
+            <CopyButton text={delivery.description} />
             <p>
               <strong>Amount:</strong> ${delivery.amount ?? 0}
             </p>
@@ -45,11 +46,10 @@ export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
           </div>
         </div>
         <DrawerFooter>
-          <DrawerClose>
-            <Button variant='secondary'>close</Button>
-          </DrawerClose>
+          <DrawerClose>Close</DrawerClose>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );
 }
+

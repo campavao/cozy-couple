@@ -67,19 +67,31 @@ export function Create() {
         </SheetHeader>
         <form
           onSubmit={onSubmit}
-          className='flex flex-col gap-4 p-4 text-darkest-blue w-full max-w-lg'
+          className='flex flex-col max-h-[70vh] md:max-h-none'
         >
-          <Input label='Address' name='address' type='address' />
-          <Input label='Phone' name='phone' type='tel' />
-          <Input label='Name' name='nameOfPerson' />
-          <Input label='Delivery Date' name='deliveryDate' type='date' />
-          <Input label='Description' name='description' />
-          <Input label='Amount ($)' name='amount' type='number' />
-          <Input label='Source' name='source' />
-          <Input label='Images' name='images' type='file' />
-          {/* <ImageInput id='images' onChange={(name) => setImages(name)} /> */}
-          <SheetFooter>
-            <SubmitButton loading={loading}>Save changes</SubmitButton>
+          <div className='flex flex-col gap-4 p-4 text-darkest-blue w-full max-w-lg overflow-y-auto'>
+            <Input label='Address' name='address' type='address' />
+            <Input label='Phone' name='phone' type='tel' />
+            <Input label='Name' name='nameOfPerson' />
+            <Input
+              label='Delivery Date'
+              name='deliveryDate'
+              type='date'
+              min={new Date().toISOString().split("T")[0]}
+            />
+            <Input label='Description' name='description' />
+            <Input label='Amount ($)' name='amount' type='number' />
+            <Input label='Source' name='source' />
+            <Input label='Images' name='images' type='file' />
+            {/* <ImageInput id='images' onChange={(name) => setImages(name)} /> */}
+          </div>
+          <SheetFooter className='pt-4'>
+            <SubmitButton
+              className='bg-primary rounded-sm p-6'
+              loading={loading}
+            >
+              Save changes
+            </SubmitButton>
           </SheetFooter>
         </form>
       </SheetContent>
@@ -93,10 +105,10 @@ interface Input extends React.InputHTMLAttributes<HTMLInputElement> {
 
 function Input({ label, ...rest }: Input) {
   return (
-    <label className='text-black'>
+    <label className='flex flex-col gap-2 text-black'>
       {label}
       <input
-        className='w-full rounded-sm p-2 border-darker-blue border-2'
+        className='w-full rounded-sm p-2 border-darker-blue border-2 text-md'
         type='text'
         {...rest}
       />
