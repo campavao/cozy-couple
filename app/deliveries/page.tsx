@@ -3,17 +3,31 @@ import { TemplatePage } from "../components/template-page";
 import { Create } from "./create";
 import { DeliveryDisplay } from "./display";
 import groupBy from "lodash/groupBy";
-import sortBy from "lodash/sortBy";
 
 export default async function Deliveries() {
   const deliveries = await getDeliveries();
 
-  const sorted = sortBy(deliveries, ({ deliveryDate }) =>
-    deliveryDate != null ? new Date(deliveryDate) : false
-  );
+  const sorted = deliveries.sort((itemA, itemB) => {
+    const a = itemA.deliveryDate;
+    const b = itemB.deliveryDate;
+
+    if (!a) {
+      return 1;
+    }
+    if (!b) {
+      return -1;
+    }
+
+    return new Date(b).getTime() - new Date(a).getTime();
+  });
 
   const byMonth = groupBy(sorted, ({ deliveryDate }) =>
-    deliveryDate != null ? new Date(deliveryDate).getMonth() : "Unknown"
+    deliveryDate != null
+      ? new Date(deliveryDate).toLocaleString("default", {
+          month: "long",
+          year: "numeric",
+        })
+      : "Unknown"
   );
 
   return (
@@ -21,11 +35,7 @@ export default async function Deliveries() {
       {Object.entries(byMonth).map(([month, deliveryItems], index) => (
         <div className='pb-4' key={index}>
           <div className='flex justify-between gap-4'>
-            <h2>
-              {month !== "Unknown"
-                ? new Date(month).toLocaleString("default", { month: "long" })
-                : month}
-            </h2>
+            <h2>{month}</h2>
             <p>
               $
               {deliveryItems
