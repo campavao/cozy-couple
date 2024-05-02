@@ -22,7 +22,7 @@ export default async function Deliveries() {
   });
 
   const byMonth = groupBy(sorted, ({ deliveryDate }) =>
-    deliveryDate != null
+    deliveryDate != null && deliveryDate !== ""
       ? new Date(deliveryDate).toLocaleString("default", {
           month: "long",
           year: "numeric",
