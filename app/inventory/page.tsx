@@ -1,4 +1,4 @@
-import { TemplatePage } from "../../components/template-page";
+import { TemplatePage } from "../components/template-page";
 
 export default function Inventory() {
   return (
