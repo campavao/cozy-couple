@@ -34,7 +34,10 @@ export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
               <strong>Name:</strong> {delivery.name ?? "None"}
             </p>
             <p>
-              <strong>Delivery Date:</strong> {delivery.deliveryDate ?? "None"}
+              <strong>Delivery Date:</strong>{" "}
+              {delivery.deliveryDate != null && delivery.deliveryDate != ""
+                ? new Date(delivery.deliveryDate).toLocaleString()
+                : "None"}
             </p>
             <CopyButton text={delivery.description} />
             <p>

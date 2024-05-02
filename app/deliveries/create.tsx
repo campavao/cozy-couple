@@ -76,7 +76,7 @@ export function Create() {
             <Input
               label='Delivery Date'
               name='deliveryDate'
-              type='date'
+              type='datetime-local'
               min={new Date().toISOString().split("T")[0]}
             />
             <Input label='Description' name='description' />
