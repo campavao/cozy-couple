@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { deleteDelivery } from "../../apiUtils";
+import { deletePickup } from "../../apiUtils";
 
 export async function DELETE(
   _request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    await deleteDelivery(params.id);
+    await deletePickup(params.id);
   } catch (err) {
     console.error(err);
     return new NextResponse("Error", { status: 500 });

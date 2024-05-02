@@ -26,12 +26,14 @@ interface Dimensions {
 }
 
 export interface Inventory extends Common {
+  displayName: string;
   dimensions: Dimensions;
+  type: string;
 }
 
 export interface Pickup extends Common {
   link: string;
-  pickupDate: Date;
+  pickupDate: string;
   source: string;
 }
 
