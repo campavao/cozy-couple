@@ -11,6 +11,7 @@ import {
 import { CopyButton } from "./copy-button";
 import { Create } from "./create";
 import { DeleteButton } from "./delete-button";
+import { ImageCarousel } from "../components/image-carousel";
 
 export function InventoryItemDisplay({ item }: { item: Inventory }) {
   return (
@@ -18,7 +19,7 @@ export function InventoryItemDisplay({ item }: { item: Inventory }) {
       <DrawerTrigger>
         <div>{item.displayName}</div>
       </DrawerTrigger>
-      <DrawerContent className='flex flex-col w-full items-center'>
+      <DrawerContent className='flex flex-col w-full items-center overflow-hidden h-[90vh]'>
         <DrawerHeader className='relative w-full max-w-md'>
           <DrawerTitle className='text-center'>Inventory Item</DrawerTitle>
           <Create
@@ -27,7 +28,7 @@ export function InventoryItemDisplay({ item }: { item: Inventory }) {
             existingItem={item}
           />
         </DrawerHeader>
-        <div className='flex flex-col items-center w-full'>
+        <div className='flex flex-col items-center w-full overflow-auto h-min'>
           <div className='flex flex-col gap-2 w-full max-w-md p-6'>
             <p>
               <strong>Name:</strong> {item.displayName ?? "None"}
@@ -48,6 +49,11 @@ export function InventoryItemDisplay({ item }: { item: Inventory }) {
                 <span>{item.dimensions.depth}&quot; D</span>
               </div>
             </p>
+            {item.images?.length > 0 && (
+              <div className='flex items-center justify-center'>
+                <ImageCarousel urls={item.images} />
+              </div>
+            )}
           </div>
         </div>
         <DrawerFooter>

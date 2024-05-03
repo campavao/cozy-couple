@@ -15,7 +15,7 @@
   --lighter-blue: hsl(var(--lighter-blue-hsl));
   --lightest-blue: hsl(var(--lightest-blue-hsl));
 
-  --snap-point-height: 100px
+  /* --snap-point-height: 150px */
 }
 
 @layer base {

@@ -8,11 +8,10 @@ import {
   SheetFooter,
   Sheet,
 } from "@/components/ui/sheet";
-import ImageInput from "../components/image-input";
 import { FormEventHandler, useCallback, useState } from "react";
 import { Delivery, Inventory } from "../types/types";
 import { SubmitButton } from "../components/SubmitButton";
-import { formatDateForInput } from "../utils/utils";
+import { formatDateForInput, uploadImage } from "../utils/utils";
 import { useRouter } from "next/navigation";
 
 interface Create {
@@ -32,8 +31,8 @@ export function Create({ label = "Create", className, existingItem }: Create) {
       setLoading(true);
       const data = e.target as any;
 
-      const item = {
-        id: existingItem?.id,
+      const item: Partial<Inventory> = {
+        ...existingItem,
         displayName: data.displayName.value,
         description: data.description.value,
         amount: data.amount.value,
@@ -45,6 +44,13 @@ export function Create({ label = "Create", className, existingItem }: Create) {
           depth: data.depth.value,
         },
       } satisfies Partial<Inventory>;
+
+      if (data.images.files) {
+        const urls = await Promise.all(
+          Array.from(data.images.files).map((file) => uploadImage(file as File))
+        );
+        item.images = urls;
+      }
 
       try {
         await fetch("/api/inventory", {
@@ -58,7 +64,7 @@ export function Create({ label = "Create", className, existingItem }: Create) {
         setLoading(false);
       }
     },
-    [existingItem?.id, router]
+    [existingItem, router]
   );
 
   return (
@@ -133,9 +139,9 @@ export function Create({ label = "Create", className, existingItem }: Create) {
               label='Images'
               name='images'
               type='file'
-              defaultValue={existingItem?.images}
+              accept='image/*, video/*'
+              multiple
             />
-            {/* <ImageInput id='images' onChange={(name) => setImages(name)} /> */}
           </div>
           <SheetFooter className='pt-4'>
             <SubmitButton

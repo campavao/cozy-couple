@@ -8,11 +8,10 @@ import {
   SheetFooter,
   Sheet,
 } from "@/components/ui/sheet";
-import ImageInput from "../components/image-input";
 import { FormEventHandler, useCallback, useState } from "react";
 import { Delivery } from "../types/types";
 import { SubmitButton } from "../components/SubmitButton";
-import { formatDateForInput } from "../utils/utils";
+import { formatDateForInput, uploadImage } from "../utils/utils";
 import { useRouter } from "next/navigation";
 
 interface Create {
@@ -36,8 +35,8 @@ export function Create({
       setLoading(true);
       const data = e.target as any;
 
-      const delivery = {
-        id: existingDelivery?.id,
+      const delivery: Partial<Delivery> = {
+        ...existingDelivery,
         address: data.address.value,
         phone: data.phone.value,
         name: data.nameOfPerson.value,
@@ -49,7 +48,14 @@ export function Create({
         description: data.description.value,
         amount: data.amount.value,
         source: data.source.value,
-      } satisfies Partial<Delivery>;
+      };
+
+      if (data.images.files) {
+        const urls = await Promise.all(
+          Array.from(data.images.files).map((file) => uploadImage(file as File))
+        );
+        delivery.images = urls;
+      }
 
       try {
         await fetch("/api/delivery", {
@@ -63,7 +69,7 @@ export function Create({
         setLoading(false);
       }
     },
-    [existingDelivery?.id, router]
+    [existingDelivery, router]
   );
 
   return (
@@ -154,9 +160,9 @@ export function Create({
               label='Images'
               name='images'
               type='file'
-              defaultValue={existingDelivery?.images}
+              accept='image/*, video/*'
+              multiple
             />
-            {/* <ImageInput id='images' onChange={(name) => setImages(name)} /> */}
           </div>
           <SheetFooter className='pt-4'>
             <SubmitButton

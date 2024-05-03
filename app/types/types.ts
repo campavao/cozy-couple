@@ -18,6 +18,10 @@ export interface Delivery extends Common {
   source: string;
 }
 
+export interface DeliveryUpload extends Delivery {
+  files: File[]
+}
+
 interface Dimensions {
   length: number;
   width: number;

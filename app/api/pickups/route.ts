@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { upsertDelivery, upsertPickup } from "../apiUtils";
+import { upsertPickup } from "../apiUtils";
 import { revalidatePath } from "next/cache";
 
 export async function POST(request: Request) {

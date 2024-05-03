@@ -8,11 +8,10 @@ import {
   SheetFooter,
   Sheet,
 } from "@/components/ui/sheet";
-import ImageInput from "../components/image-input";
 import { FormEventHandler, useCallback, useState } from "react";
-import { Delivery, Pickup } from "../types/types";
+import { Pickup } from "../types/types";
 import { SubmitButton } from "../components/SubmitButton";
-import { formatDateForInput } from "../utils/utils";
+import { formatDateForInput, uploadImage } from "../utils/utils";
 import { useRouter } from "next/navigation";
 
 interface Create {
@@ -36,14 +35,21 @@ export function Create({
       setLoading(true);
       const data = e.target as any;
 
-      const pickup = {
-        id: existingPickup?.id,
+      const pickup: Partial<Pickup> = {
+        ...existingPickup,
         pickupDate: data.pickupDate.value,
         link: data.link.value,
         description: data.description.value,
         amount: data.amount.value,
         source: data.source.value,
-      } satisfies Partial<Pickup>;
+      };
+
+      if (data.images.files) {
+        const urls = await Promise.all(
+          Array.from(data.images.files).map((file) => uploadImage(file as File))
+        );
+        pickup.images = urls;
+      }
 
       try {
         await fetch("/api/pickups", {
@@ -57,7 +63,7 @@ export function Create({
         setLoading(false);
       }
     },
-    [existingPickup?.id, router]
+    [existingPickup, router]
   );
 
   return (
@@ -121,9 +127,9 @@ export function Create({
               label='Images'
               name='images'
               type='file'
-              defaultValue={existingPickup?.images}
+              accept='image/*, video/*'
+              multiple
             />
-            {/* <ImageInput id='images' onChange={(name) => setImages(name)} /> */}
           </div>
           <SheetFooter className='pt-4'>
             <SubmitButton

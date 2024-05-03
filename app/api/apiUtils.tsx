@@ -5,8 +5,15 @@ import { redirect } from "next/navigation";
 import { upsertDocument, deleteDocument } from "./firebase/upsertDocument";
 import { getDocuments } from "./firebase/get";
 import { cache } from "react";
-import { Delivery, Inventory, Pickup, UserId } from "../types/types";
+import {
+  Delivery,
+  DeliveryUpload,
+  Inventory,
+  Pickup,
+  UserId,
+} from "../types/types";
 import { v4 as uuid } from "uuid";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 export const getUserId = cache(async (): Promise<UserId> => {
   const session = await getServerSession(authOptions);
@@ -64,7 +71,7 @@ export const getPickup = cache(async (id: string) => {
 });
 
 // UPSERTERS
-export async function upsertDelivery(delivery: Partial<Delivery>) {
+export async function upsertDelivery(delivery: Partial<DeliveryUpload>) {
   const userId = await getUserId();
   const id = delivery?.id ?? getRandomId();
   await upsertDocument("deliveries", id, { ...delivery, userId });
@@ -117,3 +124,4 @@ export async function deletePickup(pickupId: string) {
 export function getRandomId() {
   return uuid();
 }
+

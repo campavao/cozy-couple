@@ -12,6 +12,7 @@ import { CopyButton } from "./copy-button";
 import { formatDate } from "../utils/utils";
 import { Create } from "./create";
 import { DeleteButton } from "./delete-button";
+import { ImageCarousel } from "../components/image-carousel";
 
 export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
   let display = `${delivery.name}, ${delivery.address}`;
@@ -38,7 +39,7 @@ export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
           </div>
         </div>
       </DrawerTrigger>
-      <DrawerContent className='flex flex-col w-full items-center'>
+      <DrawerContent className='flex flex-col w-full items-center overflow-hidden h-[90vh]'>
         <DrawerHeader className='relative w-full max-w-md'>
           <DrawerTitle className='text-center'>Delivery</DrawerTitle>
           <Create
@@ -47,7 +48,7 @@ export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
             existingDelivery={delivery}
           />
         </DrawerHeader>
-        <div className='flex flex-col items-center w-full'>
+        <div className='flex flex-col items-center w-full overflow-auto h-min'>
           <div className='flex flex-col gap-2 w-full max-w-md p-6'>
             <p>
               <strong>Address:</strong> <CopyButton text={delivery.address} />
@@ -77,6 +78,11 @@ export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
             <p>
               <strong>Source:</strong> {delivery.source ?? "None"}
             </p>
+            {delivery.images?.length > 0 && (
+              <div className='flex items-center justify-center'>
+                <ImageCarousel urls={delivery.images} />
+              </div>
+            )}
           </div>
         </div>
         <DrawerFooter>
