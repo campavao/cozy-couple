@@ -66,7 +66,8 @@ export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
         <div className='flex flex-col items-center w-full overflow-auto h-min'>
           <div className='flex flex-col gap-2 w-full max-w-md p-6'>
             <p>
-              <strong>Address:</strong> <CopyButton text={delivery.address} />
+              <strong>Address:</strong>{" "}
+              <a href={`maps://?q=${delivery.address}`}>{delivery.address}</a>
             </p>
             <a href={`tel:${delivery.phone}`} type='tel'>
               <strong>Phone:</strong> {delivery.phone ?? "None"}
