@@ -14,7 +14,7 @@ export default async function InventoryItem({
 
   return (
     <TemplatePage
-      title='Inventory Item'
+      title='Pickup Item'
       rightButton={<Create label='Edit' existingPickup={pickup} />}
     >
       <div className='flex flex-col items-center w-full overflow-auto h-min'>
