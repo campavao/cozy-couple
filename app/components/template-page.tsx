@@ -24,7 +24,7 @@ export function TemplatePage({
         <div className='bg-white rounded-md px-4 text-darkest-blue'>
           {children}
         </div>
-        <div className='flex justify-between'>
+        <div className='flex items-center justify-between'>
           <BackButton />
           {rightButton}
         </div>

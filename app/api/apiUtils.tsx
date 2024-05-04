@@ -38,9 +38,12 @@ export const getDeliveries = async () => {
   return deliveries;
 };
 
-export const getDelivery = cache(async (id: string) => {
+export const getDelivery = cache(async (id: string): Promise<Delivery> => {
   const item = await getDocument("deliveries", id);
-  return item.data();
+  if (!item.exists()) {
+    redirect("/deliveries");
+  }
+  return item.data() as Delivery;
 });
 
 export const getInventory = cache(async () => {
@@ -54,10 +57,15 @@ export const getInventory = cache(async () => {
   return items;
 });
 
-export const getInventoryItem = cache(async (id: string) => {
-  const item = await getDocument("inventory", id);
-  return item.data();
-});
+export const getInventoryItem = cache(
+  async (id: string): Promise<Inventory> => {
+    const item = await getDocument("inventory", id);
+    if (!item.exists()) {
+      redirect("/inventory");
+    }
+    return item.data() as Inventory;
+  }
+);
 
 export const getPickups = cache(async () => {
   const userId = await getUserId();
@@ -65,9 +73,12 @@ export const getPickups = cache(async () => {
   return pickups;
 });
 
-export const getPickup = cache(async (id: string) => {
+export const getPickup = cache(async (id: string): Promise<Pickup> => {
   const item = await getDocument("pickups", id);
-  return item.data();
+  if (!item.exists()) {
+    redirect("/pickups");
+  }
+  return item.data() as Pickup;
 });
 
 // UPSERTERS
@@ -124,4 +135,3 @@ export async function deletePickup(pickupId: string) {
 export function getRandomId() {
   return uuid();
 }
-

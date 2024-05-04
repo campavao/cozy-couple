@@ -3,7 +3,10 @@ import { getPickups } from "../api/apiUtils";
 import { TemplatePage } from "../components/template-page";
 import { Create } from "./create";
 import { PickupDisplay } from "./display";
-import { formatDateForInput } from "../utils/utils";
+import { formatDate, formatDateForInput } from "../utils/utils";
+import { Pickup } from "../types/types";
+import { LoadingImage } from "../components/image";
+import Link from "next/link";
 
 export default async function Pickups() {
   const pickups = await getPickups();
@@ -46,7 +49,7 @@ export default async function Pickups() {
       <h2>Today</h2>
       <div className='flex flex-col gap-4 items-start'>
         {today.map((item, tIndex) => (
-          <PickupDisplay pickup={item} key={tIndex + "today"} />
+          <Display pickup={item} key={tIndex + "today"} />
         ))}
       </div>
     </div>
@@ -74,11 +77,33 @@ export default async function Pickups() {
           </div>
           <div className='flex flex-col gap-4 items-start'>
             {items.map((item, dIndex) => (
-              <PickupDisplay pickup={item} key={index + dIndex} />
+              <Display pickup={item} key={index + dIndex} />
             ))}
           </div>
         </div>
       ))}
     </TemplatePage>
+  );
+}
+
+function Display({ pickup }: { pickup: Pickup }) {
+  const firstImage = pickup.images.find((img) => !img.includes(".mp4"));
+
+  return (
+    <Link href={`/pickups/${pickup.id}`} className='flex gap-3'>
+      {firstImage && (
+        <LoadingImage
+          containerClassName='w-12 h-12 rounded-lg overflow-hidden'
+          className='w-full h-full rounded-lg object-center object-cover'
+          src={firstImage}
+          alt=''
+          width={100}
+          height={100}
+        />
+      )}
+      <span>
+        {formatDate(new Date(pickup.pickupDate))}, {pickup.source}
+      </span>
+    </Link>
   );
 }

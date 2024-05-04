@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { getDeliveries } from "../api/apiUtils";
+import { LoadingImage } from "../components/image";
 import { TemplatePage } from "../components/template-page";
 import { Delivery } from "../types/types";
 import {
@@ -66,7 +68,7 @@ export default async function Deliveries() {
       </div>
       <div className='flex flex-col gap-4 items-start'>
         {today.map((delivery, tIndex) => (
-          <DeliveryDisplay delivery={delivery} key={tIndex + "today"} />
+          <Display delivery={delivery} key={tIndex + "today"} />
         ))}
       </div>
     </div>
@@ -100,10 +102,7 @@ export default async function Deliveries() {
                     {deliveryItems
                       .sort(sortByDeliveryTime)
                       .map((delivery, dIndex) => (
-                        <DeliveryDisplay
-                          delivery={delivery}
-                          key={index + dIndex}
-                        />
+                        <Display delivery={delivery} key={index + dIndex} />
                       ))}
                   </div>
                 </div>
@@ -113,5 +112,32 @@ export default async function Deliveries() {
         );
       })}
     </TemplatePage>
+  );
+}
+
+function Display({ delivery }: { delivery: Delivery }) {
+  const firstImage = delivery.images?.find((img) => !img.includes(".mp4"));
+
+  return (
+    <Link href={`/deliveries/${delivery.id}`} className='flex gap-2'>
+      {firstImage && (
+        <LoadingImage
+          containerClassName='w-12 h-full rounded-lg overflow-hidden'
+          className='w-full h-full rounded-lg object-center object-cover'
+          src={firstImage}
+          alt=''
+          width={100}
+          height={100}
+        />
+      )}
+      <div className='flex flex-col gap-1 text-left'>
+        <div className='flex md:flex-row flex-col underline'>
+          {delivery.deliveryWindow.from} - {delivery.deliveryWindow.to}
+        </div>
+        <div>
+          {delivery.address}, {delivery.name}
+        </div>
+      </div>
+    </Link>
   );
 }

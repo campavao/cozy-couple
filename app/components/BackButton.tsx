@@ -1,9 +1,16 @@
-import Link from "next/link";
+"use client";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export function BackButton() {
+  const router = useRouter();
   return (
-    <Link className='mt-4 inline-block' href='/'>
+    <Button
+      variant='ghost'
+      className='inline-block'
+      onClick={() => router.back()}
+    >
       Back
-    </Link>
+    </Button>
   );
 }

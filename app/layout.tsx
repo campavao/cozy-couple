@@ -19,7 +19,7 @@ export default async function RootLayout({
   return (
     <html lang='en'>
       <body className={font.className}>
-        <main className='m-8 sm:m-20'>{children}</main>
+        <main className='sm:m-20 m-4'>{children}</main>
       </body>
     </html>
   );
