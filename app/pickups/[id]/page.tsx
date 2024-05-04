@@ -1,9 +1,10 @@
-import { getInventoryItem, getPickup } from "@/app/api/apiUtils";
+import { getPickup } from "@/app/api/apiUtils";
 import { TemplatePage } from "@/app/components/template-page";
 import { Create } from "../create";
 import { CopyButton } from "../copy-button";
 import { ImageCarousel } from "@/app/components/image-carousel";
 import { formatDateForInput } from "@/app/utils/utils";
+import { DeleteButton } from "../delete-button";
 
 export default async function InventoryItem({
   params,
@@ -15,7 +16,12 @@ export default async function InventoryItem({
   return (
     <TemplatePage
       title='Pickup Item'
-      rightButton={<Create label='Edit' existingPickup={pickup} />}
+      rightButton={
+        <div className='flex gap-4'>
+          <DeleteButton id={pickup.id} />
+          <Create label='Edit' existingPickup={pickup} />
+        </div>
+      }
     >
       <div className='flex flex-col items-center w-full overflow-auto h-min'>
         <div className='flex flex-col gap-2 w-full max-w-md p-6'>

@@ -9,12 +9,17 @@ export default async function Inventory() {
 
   return (
     <TemplatePage title='Inventory' rightButton={<Create />}>
-      {inventoryItems.map((item, index) => (
-        // <InventoryItemDisplay item={item} key={index} />
-        <Link href={`/inventory/${item.id}`} key={index}>
-          {item.displayName}, {item.type}
-        </Link>
-      ))}
+      <div className='flex flex-col gap-4 p-4'>
+        {inventoryItems.map((item, index) => (
+          <Link
+            className='inline-block w-full'
+            href={`/inventory/${item.id}`}
+            key={index}
+          >
+            {item.displayName}, {item.type}
+          </Link>
+        ))}
+      </div>
     </TemplatePage>
   );
 }

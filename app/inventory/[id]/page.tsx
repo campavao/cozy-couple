@@ -3,6 +3,7 @@ import { TemplatePage } from "@/app/components/template-page";
 import { Create } from "../create";
 import { CopyButton } from "../copy-button";
 import { ImageCarousel } from "@/app/components/image-carousel";
+import { DeleteButton } from "../delete-button";
 
 export default async function InventoryItem({
   params,
@@ -14,7 +15,12 @@ export default async function InventoryItem({
   return (
     <TemplatePage
       title='Inventory Item'
-      rightButton={<Create label='Edit' existingItem={item} />}
+      rightButton={
+        <div className='flex gap-4'>
+          <DeleteButton id={item.id} />
+          <Create label='Edit' existingItem={item} />
+        </div>
+      }
     >
       <div className='flex flex-col items-center w-full overflow-auto h-min'>
         <div className='flex flex-col gap-2 w-full max-w-md p-6'>
