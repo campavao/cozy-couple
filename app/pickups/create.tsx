@@ -104,7 +104,6 @@ export function Create({
               defaultValue={
                 existingPickup?.pickupDate ?? formatDateForInput(new Date())
               }
-              min={formatDateForInput(new Date())}
             />
             <Input
               label='Description'

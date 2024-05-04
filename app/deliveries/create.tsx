@@ -122,7 +122,6 @@ export function Create({
               defaultValue={
                 existingDelivery?.deliveryDate ?? formatDateForInput(new Date())
               }
-              min={formatDateForInput(new Date())}
             />
             <Select
               label='Delivery Window Start Time'
