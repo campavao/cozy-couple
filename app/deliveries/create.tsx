@@ -95,7 +95,7 @@ export function Create({
       </SheetTrigger>
       <SheetContent side='bottom' className='flex flex-col w-full items-center'>
         <SheetHeader className='w-full max-w-lg'>
-          <SheetTitle>New delivery</SheetTitle>
+          <SheetTitle>{existingDelivery ? "Edit" : "New"} delivery</SheetTitle>
         </SheetHeader>
         <form
           onSubmit={onSubmit}

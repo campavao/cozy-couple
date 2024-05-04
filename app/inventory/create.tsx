@@ -90,7 +90,7 @@ export function Create({ label = "Create", className, existingItem }: Create) {
       </SheetTrigger>
       <SheetContent side='bottom' className='flex flex-col w-full items-center'>
         <SheetHeader className='w-full max-w-lg'>
-          <SheetTitle>New delivery</SheetTitle>
+          <SheetTitle>{existingItem ? "Edit" : "New"} inventory</SheetTitle>
         </SheetHeader>
         <form
           onSubmit={onSubmit}

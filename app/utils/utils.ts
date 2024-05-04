@@ -6,6 +6,7 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
+import { Delivery } from "../types/types";
 
 export function formatDate(date: Date) {
   const number = date.toLocaleDateString("default", {
@@ -53,3 +54,36 @@ export async function deleteImage(name: string) {
   const storageRef = ref(storage, `images/${name}`);
   await deleteObject(storageRef);
 }
+
+export const sortByDeliveryTime = (itemA: Delivery, itemB: Delivery) => {
+  const a = itemA.deliveryDate;
+  const b = itemB.deliveryDate;
+
+  if (!a) {
+    return 1;
+  }
+  if (!b) {
+    return -1;
+  }
+
+  const dateA = setHourAndMinute(new Date(a), itemA);
+  const dateB = setHourAndMinute(new Date(b), itemB);
+
+  return dateA.getTime() - dateB.getTime();
+};
+
+const setHourAndMinute = (date: Date, item: Delivery) => {
+  if (item.deliveryWindow.from) {
+    const [hourString, minuteWithAmPm] = item.deliveryWindow.from.split(":");
+    let hour = Number(hourString);
+    const [minute, amOrPm] = minuteWithAmPm.split(" ");
+    if (amOrPm === "PM") {
+      hour += 12;
+    }
+
+    date.setUTCHours(hour);
+    date.setUTCMinutes(Number(minute));
+  }
+
+  return date;
+};

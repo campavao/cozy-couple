@@ -9,19 +9,13 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { CopyButton } from "./copy-button";
-import { formatDate, formatDateForInput } from "../utils/utils";
+import { formatDateForInput } from "../utils/utils";
 import { Create } from "./create";
 import { DeleteButton } from "./delete-button";
 import { ImageCarousel } from "../components/image-carousel";
 import { LoadingImage } from "../components/image";
 
 export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
-  let display = `${delivery.name}, ${delivery.address}`;
-  if (delivery.deliveryDate != null && delivery.deliveryDate != "") {
-    display = `${formatDate(new Date(delivery.deliveryDate))}, ${
-      delivery.name
-    }`;
-  }
   const firstImage = delivery.images?.find((img) => !img.includes(".mp4"));
 
   return (
@@ -38,15 +32,9 @@ export function DeliveryDisplay({ delivery }: { delivery: Delivery }) {
               height={100}
             />
           )}
-          <div className='flex flex-col gap-2 text-left'>
-            <div className='flex md:flex-row flex-col md:gap-2'>
-              <div className='underline'>
-                {formatDate(new Date(delivery.deliveryDate))}
-              </div>
-              <div>
-                {delivery.deliveryWindow &&
-                  `${delivery.deliveryWindow.from} - ${delivery.deliveryWindow.to}`}
-              </div>
+          <div className='flex flex-col gap-1 text-left'>
+            <div className='flex md:flex-row flex-col underline'>
+              {delivery.deliveryWindow.from} - {delivery.deliveryWindow.to}
             </div>
             <div>
               {delivery.address}, {delivery.name}
