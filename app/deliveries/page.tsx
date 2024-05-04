@@ -1,5 +1,6 @@
 import { getDeliveries } from "../api/apiUtils";
 import { TemplatePage } from "../components/template-page";
+import { formatDateForInput } from "../utils/utils";
 import { Create } from "./create";
 import { DeliveryDisplay } from "./display";
 import groupBy from "lodash/groupBy";
@@ -30,8 +31,33 @@ export default async function Deliveries() {
       : "Unknown"
   );
 
+  const today = sorted.filter((item) => {
+    const thisDate = new Date(item.deliveryDate);
+    const today = new Date();
+
+    return (
+      item.deliveryDate &&
+      formatDateForInput(thisDate) === formatDateForInput(today)
+    );
+  });
+
+  const subHeader = today.length > 0 && (
+    <div className='p-4 border-b-4 mx-[-16px] last:border-none border-darkest-blue'>
+      <h2>Today</h2>
+      <div className='flex flex-col gap-4 items-start'>
+        {today.map((delivery, tIndex) => (
+          <DeliveryDisplay delivery={delivery} key={tIndex + "today"} />
+        ))}
+      </div>
+    </div>
+  );
+
   return (
-    <TemplatePage title='Deliveries' rightButton={<Create />}>
+    <TemplatePage
+      title='Deliveries'
+      rightButton={<Create />}
+      subHeader={subHeader}
+    >
       {Object.entries(byMonth).map(([month, deliveryItems], index) => (
         <div
           className='p-4 border-b-4 mx-[-16px] last:border-none border-darkest-blue'
@@ -46,7 +72,7 @@ export default async function Deliveries() {
                 .reduce((acc, curr) => Number(acc) + Number(curr), 0)}
             </p>
           </div>
-          <div className='flex flex-col gap-4 items-start'>
+          <div className='flex flex-col gap-6 items-start'>
             {deliveryItems.map((delivery, dIndex) => (
               <DeliveryDisplay delivery={delivery} key={index + dIndex} />
             ))}
