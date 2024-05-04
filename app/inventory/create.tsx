@@ -45,11 +45,15 @@ export function Create({ label = "Create", className, existingItem }: Create) {
         },
       } satisfies Partial<Inventory>;
 
-      if (data.images.files) {
+      const files = Array.from(data.images.files);
+
+      if (files.length > 0) {
         const urls = await Promise.all(
-          Array.from(data.images.files).map((file) => uploadImage(file as File))
+          files.map((file) => uploadImage(file as File))
         );
-        item.images = urls;
+        const previousUrls = structuredClone(existingItem?.images ?? []);
+        previousUrls.push(...urls);
+        item.images = previousUrls;
       }
 
       try {

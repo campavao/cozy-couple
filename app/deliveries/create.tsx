@@ -50,11 +50,15 @@ export function Create({
         source: data.source.value,
       };
 
-      if (data.images.files) {
+      const files = Array.from(data.images.files);
+
+      if (files.length > 0) {
         const urls = await Promise.all(
-          Array.from(data.images.files).map((file) => uploadImage(file as File))
+          files.map((file) => uploadImage(file as File))
         );
-        delivery.images = urls;
+        const previousUrls = structuredClone(existingDelivery?.images ?? []);
+        previousUrls.push(...urls);
+        delivery.images = previousUrls;
       }
 
       try {
