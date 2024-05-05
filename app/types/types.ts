@@ -36,8 +36,13 @@ export interface Inventory extends Common {
 }
 
 export interface Pickup extends Common {
+  address: string;
   link: string;
   pickupDate: string;
+  pickupWindow: {
+    from: string;
+    to: string;
+  };
   source: string;
 }
 

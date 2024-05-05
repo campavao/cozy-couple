@@ -37,7 +37,12 @@ export function Create({
 
       const pickup: Partial<Pickup> = {
         ...existingPickup,
+        address: data.address.value,
         pickupDate: data.pickupDate.value,
+        pickupWindow: {
+          from: data.pickupWindowFrom.value,
+          to: data.pickupWindowTo.value,
+        },
         link: data.link.value,
         description: data.description.value,
         amount: data.amount.value,
@@ -97,6 +102,19 @@ export function Create({
         >
           <div className='flex flex-col gap-4 p-4 text-darkest-blue w-full max-w-lg md:grid-cols-2 md:grid md:flex-wrap overflow-y-auto'>
             <Input
+              label='Images'
+              name='images'
+              type='file'
+              accept='image/*, video/*'
+              multiple
+            />
+            <Input
+              label='Address'
+              name='address'
+              type='address'
+              defaultValue={existingPickup?.address}
+            />
+            <Input
               label='Link'
               name='link'
               defaultValue={existingPickup?.link}
@@ -108,6 +126,18 @@ export function Create({
               defaultValue={
                 existingPickup?.pickupDate ?? formatDateForInput(new Date())
               }
+            />
+            <Select
+              label='Pickup Window Start Time'
+              name='pickupWindowFrom'
+              defaultValue={existingPickup?.pickupWindow?.from ?? "10:00 AM"}
+              options={timeOptions}
+            />
+            <Select
+              label='Pickup Window End Time'
+              name='pickupWindowTo'
+              defaultValue={existingPickup?.pickupWindow?.to ?? "03:00 PM"}
+              options={timeOptions}
             />
             <Input
               label='Description'
@@ -125,13 +155,6 @@ export function Create({
               label='Source'
               name='source'
               defaultValue='Facebook Marketplace'
-            />
-            <Input
-              label='Images'
-              name='images'
-              type='file'
-              accept='image/*, video/*'
-              multiple
             />
           </div>
           <SheetFooter className='pt-4'>

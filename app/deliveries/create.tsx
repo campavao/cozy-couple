@@ -103,6 +103,13 @@ export function Create({
         >
           <div className='flex flex-col gap-4 p-4 text-darkest-blue w-full max-w-lg md:grid-cols-2 md:grid md:flex-wrap overflow-y-auto'>
             <Input
+              label='Images'
+              name='images'
+              type='file'
+              accept='image/*, video/*'
+              multiple
+            />
+            <Input
               label='Address'
               name='address'
               type='address'
@@ -154,17 +161,10 @@ export function Create({
               defaultValue={existingDelivery?.amount}
             />
             <Select
-              label='Source'
+              label='Sold on'
               name='source'
               defaultValue='Facebook Marketplace'
               options={sourceOptions}
-            />
-            <Input
-              label='Images'
-              name='images'
-              type='file'
-              accept='image/*, video/*'
-              multiple
             />
           </div>
           <SheetFooter className='pt-4'>
