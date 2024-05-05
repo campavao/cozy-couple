@@ -9,10 +9,12 @@ import {
   Sheet,
 } from "@/components/ui/sheet";
 import { FormEventHandler, useCallback, useState } from "react";
-import { Delivery, Inventory } from "../types/types";
+import { Inventory } from "../types/types";
 import { SubmitButton } from "../components/SubmitButton";
-import { formatDateForInput, uploadImage } from "../utils/utils";
+import { uploadImage } from "../utils/utils";
 import { useRouter } from "next/navigation";
+import { CouchForm, getCouchValues } from "../components/couch-form";
+import { Input } from "../components/input";
 
 interface Create {
   label?: string;
@@ -36,13 +38,7 @@ export function Create({ label = "Create", className, existingItem }: Create) {
         displayName: data.displayName.value,
         description: data.description.value,
         amount: data.amount.value,
-        type: data.type.value,
-        dimensions: {
-          length: data.length.value,
-          width: data.width.value,
-          height: data.height.value,
-          depth: data.depth.value,
-        },
+        couch: getCouchValues(data),
       } satisfies Partial<Inventory>;
 
       const files = Array.from(data.images.files);
@@ -92,41 +88,21 @@ export function Create({ label = "Create", className, existingItem }: Create) {
         <SheetHeader className='w-full max-w-lg'>
           <SheetTitle>{existingItem ? "Edit" : "New"} inventory</SheetTitle>
         </SheetHeader>
-        <form
-          onSubmit={onSubmit}
-          className='flex flex-col max-h-[70vh] md:max-h-none'
-        >
+        <form onSubmit={onSubmit} className='flex flex-col max-h-[70vh]'>
           <div className='flex flex-col gap-4 p-4 text-darkest-blue w-full max-w-lg md:grid-cols-2 md:grid md:flex-wrap overflow-y-auto'>
+            <Input
+              label='Images'
+              name='images'
+              type='file'
+              accept='image/*, video/*'
+              multiple
+            />
             <Input
               label='Name'
               name='displayName'
               defaultValue={existingItem?.displayName}
             />
-            <Input label='Type' name='type' defaultValue={existingItem?.type} />
-            <Input
-              label='Length'
-              name='length'
-              type='number'
-              defaultValue={existingItem?.dimensions?.length}
-            />
-            <Input
-              label='Width'
-              name='width'
-              type='number'
-              defaultValue={existingItem?.dimensions?.width}
-            />
-            <Input
-              label='Height'
-              name='height'
-              type='number'
-              defaultValue={existingItem?.dimensions?.height}
-            />
-            <Input
-              label='Depth'
-              name='depth'
-              type='number'
-              defaultValue={existingItem?.dimensions?.depth}
-            />
+
             <Input
               label='Description'
               name='description'
@@ -139,13 +115,7 @@ export function Create({ label = "Create", className, existingItem }: Create) {
               type='number'
               defaultValue={existingItem?.amount}
             />
-            <Input
-              label='Images'
-              name='images'
-              type='file'
-              accept='image/*, video/*'
-              multiple
-            />
+            <CouchForm couch={existingItem?.couch} />
           </div>
           <SheetFooter className='pt-4'>
             <SubmitButton
@@ -160,103 +130,3 @@ export function Create({ label = "Create", className, existingItem }: Create) {
     </Sheet>
   );
 }
-
-interface Input extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-}
-
-function Input({ label, className, ...rest }: Input) {
-  return (
-    <label className={`flex flex-col gap-2 text-black ${className}`}>
-      {label}
-      <input
-        className='w-full rounded-sm p-2 border-darker-blue border-2 text-md'
-        type='text'
-        {...rest}
-      />
-    </label>
-  );
-}
-
-interface Select extends React.InputHTMLAttributes<HTMLSelectElement> {
-  label: string;
-  options: string[];
-}
-
-function Select({ label, options, ...rest }: Select) {
-  return (
-    <label className='flex flex-col gap-2 text-black'>
-      {label}
-      <select
-        className='w-full rounded-sm p-2 border-darker-blue border-2 text-md'
-        type='text'
-        {...rest}
-      >
-        {options.map((value) => (
-          <option key={value} value={value}>
-            {value}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-const timeOptions = [
-  "00:00 AM",
-  "00:30 AM",
-  "01:00 AM",
-  "01:30 AM",
-  "02:00 AM",
-  "02:30 AM",
-  "03:00 AM",
-  "03:30 AM",
-  "04:00 AM",
-  "04:30 AM",
-  "05:00 AM",
-  "05:30 AM",
-  "06:00 AM",
-  "06:30 AM",
-  "07:00 AM",
-  "07:30 AM",
-  "08:00 AM",
-  "08:30 AM",
-  "09:00 AM",
-  "09:30 AM",
-  "10:00 AM",
-  "10:30 AM",
-  "11:00 AM",
-  "11:30 AM",
-  "12:00 PM",
-  "12:30 PM",
-  "01:00 PM",
-  "01:30 PM",
-  "02:00 PM",
-  "02:30 PM",
-  "03:00 PM",
-  "03:30 PM",
-  "04:00 PM",
-  "04:30 PM",
-  "05:00 PM",
-  "05:30 PM",
-  "06:00 PM",
-  "06:30 PM",
-  "07:00 PM",
-  "07:30 PM",
-  "08:00 PM",
-  "08:30 PM",
-  "09:00 PM",
-  "09:30 PM",
-  "10:00 PM",
-  "10:30 PM",
-  "11:00 PM",
-  "11:30 PM",
-];
-
-const sourceOptions = [
-  "Facebook Marketplace",
-  "OfferUp",
-  "Craigslist",
-  "Website",
-  "Other",
-];

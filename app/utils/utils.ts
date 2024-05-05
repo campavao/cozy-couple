@@ -105,13 +105,10 @@ export function getTotal<T extends object>(
     .reduce((acc, curr) => Number(acc) + Number(curr), 0);
 }
 
-function isTupleOfStringAndArrayOfT<T>(item: any): item is [string, T[]][] {
-  return (
-    Array.isArray(item) &&
-    item.length === 2 &&
-    typeof item[0] === "string" &&
-    isArrayOfT(item[1])
-  );
+function isTupleOfStringAndArrayOfT<T>(
+  item: T[] | [string, T[]][]
+): item is [string, T[]][] {
+  return Array.isArray(item) && Array.isArray(item[0]);
 }
 
 function isArrayOfT<T>(item: any): item is T[] {

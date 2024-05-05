@@ -5,6 +5,7 @@ import { CopyButton } from "../copy-button";
 import { ImageCarousel } from "@/app/components/image-carousel";
 import { formatDateForInput } from "@/app/utils/utils";
 import { DeleteButton } from "../delete-button";
+import { CouchDisplay } from "@/app/components/couch-display";
 
 export default async function DeliveryItem({
   params,
@@ -23,43 +24,46 @@ export default async function DeliveryItem({
         </div>
       }
     >
-      <div className='flex flex-col items-center w-full overflow-auto h-min'>
-        <div className='flex flex-col gap-2 w-full max-w-md p-6'>
-          <p>
-            <strong>Address:</strong>{" "}
-            <a href={`maps://?q=${delivery.address}`}>{delivery.address}</a>
-          </p>
+      <div className='flex flex-col gap-2 w-full py-4'>
+        <p>
+          <strong>Address:</strong>{" "}
+          <a href={`maps://?q=${delivery.address}`}>{delivery.address}</a>
+        </p>
+        {delivery.phone && (
           <a href={`tel:${delivery.phone}`} type='tel'>
-            <strong>Phone:</strong> {delivery.phone ?? "None"}
+            <strong>Phone:</strong> {delivery.phone}
           </a>
+        )}
+        {delivery.name && (
           <p>
-            <strong>Name:</strong> {delivery.name ?? "None"}
+            <strong>Name:</strong> {delivery.name}
           </p>
+        )}
+        <p>
+          <strong>Delivery Date:</strong>{" "}
+          {delivery.deliveryDate != null && delivery.deliveryDate != ""
+            ? formatDateForInput(new Date(delivery.deliveryDate))
+            : "None"}
+        </p>
+        {delivery.deliveryWindow && (
           <p>
-            <strong>Delivery Date:</strong>{" "}
-            {delivery.deliveryDate != null && delivery.deliveryDate != ""
-              ? formatDateForInput(new Date(delivery.deliveryDate))
-              : "None"}
+            <strong>Delivery Window:</strong> {delivery.deliveryWindow.from} -{" "}
+            {delivery.deliveryWindow.to}
           </p>
-          {delivery.deliveryWindow && (
-            <p>
-              <strong>Delivery Window:</strong> {delivery.deliveryWindow.from} -{" "}
-              {delivery.deliveryWindow.to}
-            </p>
-          )}
-          <CopyButton text={delivery.description} />
-          <p>
-            <strong>Amount:</strong> ${delivery.amount ?? 0}
-          </p>
-          <p>
-            <strong>Source:</strong> {delivery.source ?? "None"}
-          </p>
-          {delivery.images?.length > 0 && (
-            <div className='flex items-center justify-center'>
-              <ImageCarousel urls={delivery.images} />
-            </div>
-          )}
-        </div>
+        )}
+        <CopyButton text={delivery.description} />
+        <p>
+          <strong>Amount:</strong> ${delivery.amount ?? 0}
+        </p>
+        <p>
+          <strong>Source:</strong> {delivery.source ?? "None"}
+        </p>
+        <CouchDisplay couch={delivery.couch} />
+        {delivery.images?.length > 0 && (
+          <div className='flex items-center justify-center'>
+            <ImageCarousel urls={delivery.images} />
+          </div>
+        )}
       </div>
     </TemplatePage>
   );

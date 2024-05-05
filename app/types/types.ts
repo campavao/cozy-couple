@@ -4,6 +4,7 @@ interface Common {
   description: string;
   images: string[];
   userId: string;
+  couch: Couch;
 }
 
 export interface Delivery extends Common {
@@ -19,20 +20,11 @@ export interface Delivery extends Common {
 }
 
 export interface DeliveryUpload extends Delivery {
-  files: File[]
-}
-
-interface Dimensions {
-  length: number;
-  width: number;
-  height: number;
-  depth: number;
+  files: File[];
 }
 
 export interface Inventory extends Common {
   displayName: string;
-  dimensions: Dimensions;
-  type: string;
 }
 
 export interface Pickup extends Common {
@@ -47,3 +39,21 @@ export interface Pickup extends Common {
 }
 
 export type UserId = string;
+
+export interface Couch {
+  color: string;
+  brand: string;
+  type: CouchType;
+  dimensions: string;
+}
+
+export const COUNT_TYPES = [
+  "L Sectional",
+  "U Sectional",
+  "Couch Set",
+  "3 Seater",
+  "Love Seat",
+  "Patio Set",
+] as const;
+
+type CouchType = typeof COUNT_TYPES;

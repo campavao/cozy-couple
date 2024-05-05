@@ -13,6 +13,9 @@ import { Delivery } from "../types/types";
 import { SubmitButton } from "../components/SubmitButton";
 import { formatDateForInput, uploadImage } from "../utils/utils";
 import { useRouter } from "next/navigation";
+import { CouchForm, getCouchValues } from "../components/couch-form";
+import { Select } from "../components/select";
+import { Input } from "../components/input";
 
 interface Create {
   label?: string;
@@ -48,6 +51,7 @@ export function Create({
         description: data.description.value,
         amount: data.amount.value,
         source: data.source.value,
+        couch: getCouchValues(data),
       };
 
       const files = Array.from(data.images.files);
@@ -97,10 +101,7 @@ export function Create({
         <SheetHeader className='w-full max-w-lg'>
           <SheetTitle>{existingDelivery ? "Edit" : "New"} delivery</SheetTitle>
         </SheetHeader>
-        <form
-          onSubmit={onSubmit}
-          className='flex flex-col max-h-[70vh] md:max-h-none'
-        >
+        <form onSubmit={onSubmit} className='flex flex-col max-h-[70vh]'>
           <div className='flex flex-col gap-4 p-4 text-darkest-blue w-full max-w-lg md:grid-cols-2 md:grid md:flex-wrap overflow-y-auto'>
             <Input
               label='Images'
@@ -166,6 +167,7 @@ export function Create({
               defaultValue='Facebook Marketplace'
               options={sourceOptions}
             />
+            <CouchForm couch={existingDelivery?.couch} />
           </div>
           <SheetFooter className='pt-4'>
             <SubmitButton
@@ -178,47 +180,6 @@ export function Create({
         </form>
       </SheetContent>
     </Sheet>
-  );
-}
-
-interface Input extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-}
-
-function Input({ label, className, ...rest }: Input) {
-  return (
-    <label className={`flex flex-col gap-2 text-black ${className}`}>
-      {label}
-      <input
-        className='w-full rounded-sm p-2 border-darker-blue border-2 text-md'
-        type='text'
-        {...rest}
-      />
-    </label>
-  );
-}
-
-interface Select extends React.InputHTMLAttributes<HTMLSelectElement> {
-  label: string;
-  options: string[];
-}
-
-function Select({ label, options, ...rest }: Select) {
-  return (
-    <label className='flex flex-col gap-2 text-black'>
-      {label}
-      <select
-        className='w-full rounded-sm p-2 border-darker-blue border-2 text-md'
-        type='text'
-        {...rest}
-      >
-        {options.map((value) => (
-          <option key={value} value={value}>
-            {value}
-          </option>
-        ))}
-      </select>
-    </label>
   );
 }
 
