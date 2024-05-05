@@ -15,10 +15,12 @@ export function Chart<T extends object>({
   data,
   xKey,
   yKey,
+  format,
 }: {
   data: T[];
   xKey: keyof T;
   yKey: keyof T;
+  format?: string;
 }) {
   return (
     <ResponsiveContainer width='100%' height={300}>
@@ -35,7 +37,9 @@ export function Chart<T extends object>({
         }}
       >
         <XAxis dataKey={xKey as string} />
-        <YAxis />
+        <YAxis
+          tickFormatter={(value) => (format ? `${format}${value}` : value)}
+        />
         <Tooltip />
         <Bar
           dataKey={yKey as string}

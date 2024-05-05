@@ -7,8 +7,6 @@ export function BackButton() {
 
   const url = pathname.substring(0, pathname.lastIndexOf("/"));
 
-  console.log(url);
-
   return (
     <Link className='inline-block' href={url.length === 0 ? "/" : url}>
       Back

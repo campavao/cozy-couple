@@ -57,3 +57,5 @@ export const COUNT_TYPES = [
 ] as const;
 
 type CouchType = typeof COUNT_TYPES;
+
+export type Item = Delivery | Pickup | Inventory
