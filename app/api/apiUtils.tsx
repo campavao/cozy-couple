@@ -43,7 +43,10 @@ export const getDelivery = cache(async (id: string): Promise<Delivery> => {
   if (!item.exists()) {
     redirect("/deliveries");
   }
-  return item.data() as Delivery;
+  return {
+    ...item.data(),
+    id,
+  } as Delivery;
 });
 
 export const getInventory = cache(async () => {
@@ -63,7 +66,10 @@ export const getInventoryItem = cache(
     if (!item.exists()) {
       redirect("/inventory");
     }
-    return item.data() as Inventory;
+    return {
+      ...item.data(),
+      id,
+    } as Inventory;
   }
 );
 
@@ -78,7 +84,10 @@ export const getPickup = cache(async (id: string): Promise<Pickup> => {
   if (!item.exists()) {
     redirect("/pickups");
   }
-  return item.data() as Pickup;
+  return {
+    ...item.data(),
+    id,
+  } as Pickup;
 });
 
 // UPSERTERS
