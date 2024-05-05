@@ -123,7 +123,18 @@ export default async function Analytics() {
             callback={(items) => getTotal<Pickup>(items, "amount")}
             format='$'
           />
-          <h2 className='col-span-2'>Couch Sales</h2>
+          <div className='md:col-span-2'>
+            <ChartCard
+              title='Total Sales by Day of Week'
+              list={deliveries}
+              groupKey='deliveryDate'
+              callback={(items) => items.length}
+              monthFormat={{
+                weekday: "long",
+              }}
+            />
+          </div>
+          <h2 className='md:col-span-2'>Couch Sales</h2>
           <CouchCard
             title='Color'
             list={deliveries}
@@ -142,7 +153,7 @@ export default async function Analytics() {
             groupKey='brand'
             callback={(items) => items.length}
           />
-          <h2 className='col-span-2'>Couch Profit</h2>
+          <h2 className='md:col-span-2'>Couch Profit</h2>
           <CouchCard
             title='Color'
             list={deliveries}
@@ -202,17 +213,25 @@ function ChartCard<T extends object>(props: {
   groupKey: keyof T;
   callback: (items: T[]) => number;
   format?: string;
+  monthFormat?: Intl.DateTimeFormatOptions;
 }) {
-  const { title, list, groupKey, callback, format } = props;
+  const {
+    title,
+    list,
+    groupKey,
+    callback,
+    format,
+    monthFormat = {
+      month: "long",
+      year: "numeric",
+    },
+  } = props;
 
   const byDate = groupBy(list, (item) => item[groupKey]);
 
   const byMonth = groupBy(Object.entries(byDate), ([date, _]) =>
     date !== "Unknown"
-      ? parseISO(date).toLocaleString("default", {
-          month: "long",
-          year: "numeric",
-        })
+      ? parseISO(date).toLocaleString("default", monthFormat)
       : "Unknown"
   );
 
