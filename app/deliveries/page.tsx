@@ -11,6 +11,7 @@ import {
 import { Create } from "./create";
 import { DeliveryDisplay } from "./display";
 import groupBy from "lodash/groupBy";
+import { getDate, isToday, parseISO, toDate } from "date-fns";
 
 export default async function Deliveries() {
   const deliveries = await getDeliveries();
@@ -26,20 +27,14 @@ export default async function Deliveries() {
       return -1;
     }
 
-    return new Date(b).getTime() - new Date(a).getTime();
+    return parseISO(b).getTime() - parseISO(a).getTime();
   });
 
-  const byDate = groupBy(sorted, ({ deliveryDate }) =>
-    deliveryDate != null && deliveryDate !== ""
-      ? new Date(deliveryDate).toLocaleString("default", {
-          dateStyle: "long",
-        })
-      : "Unknown"
-  );
+  const byDate = groupBy(sorted, ({ deliveryDate }) => deliveryDate);
 
   const byMonth = groupBy(Object.entries(byDate), ([date, _]) =>
     date !== "Unknown"
-      ? new Date(date).toLocaleString("default", {
+      ? parseISO(date).toLocaleString("default", {
           month: "long",
           year: "numeric",
         })
@@ -47,15 +42,7 @@ export default async function Deliveries() {
   );
 
   const today = sorted
-    .filter((item) => {
-      const thisDate = new Date(item.deliveryDate);
-      const today = new Date();
-
-      return (
-        item.deliveryDate &&
-        formatDateForInput(thisDate) === formatDateForInput(today)
-      );
-    })
+    .filter((item) => isToday(parseISO(item.deliveryDate)))
     .sort(sortByDeliveryTime);
 
   const routeUrl = today.map((item) => `&daddr=${item.address}`);

@@ -7,6 +7,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import { Delivery } from "../types/types";
+import { parseISO } from "date-fns";
 
 export function formatDate(date: Date) {
   const number = date.toLocaleDateString("default", {
@@ -66,8 +67,8 @@ export const sortByDeliveryTime = (itemA: Delivery, itemB: Delivery) => {
     return -1;
   }
 
-  const dateA = setHourAndMinute(new Date(a), itemA);
-  const dateB = setHourAndMinute(new Date(b), itemB);
+  const dateA = setHourAndMinute(parseISO(a), itemA);
+  const dateB = setHourAndMinute(parseISO(b), itemB);
 
   return dateA.getTime() - dateB.getTime();
 };
@@ -77,7 +78,7 @@ const setHourAndMinute = (date: Date, item: Delivery) => {
     const [hourString, minuteWithAmPm] = item.deliveryWindow.from.split(":");
     let hour = Number(hourString);
     const [minute, amOrPm] = minuteWithAmPm.split(" ");
-    if (amOrPm === "PM") {
+    if (amOrPm === "PM" && hour !== 12) {
       hour += 12;
     }
 

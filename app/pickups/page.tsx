@@ -6,6 +6,7 @@ import { formatDate, formatDateForInput } from "../utils/utils";
 import { Pickup } from "../types/types";
 import { LoadingImage } from "../components/image";
 import Link from "next/link";
+import { isToday, parseISO } from "date-fns";
 
 export default async function Pickups() {
   const pickups = await getPickups();
@@ -21,35 +22,21 @@ export default async function Pickups() {
       return -1;
     }
 
-    return new Date(b).getTime() - new Date(a).getTime();
+    return parseISO(b).getTime() - parseISO(a).getTime();
   });
 
-  const byDate = groupBy(sorted, ({ pickupDate }) =>
-    pickupDate != null && pickupDate !== ""
-      ? new Date(pickupDate).toLocaleString("default", {
-          dateStyle: "long",
-        })
-      : "Unknown"
-  );
+  const byDate = groupBy(sorted, ({ pickupDate }) => pickupDate);
 
   const byMonth = groupBy(Object.entries(byDate), ([date, _]) =>
     date !== "Unknown"
-      ? new Date(date).toLocaleString("default", {
+      ? parseISO(date).toLocaleString("default", {
           month: "long",
           year: "numeric",
         })
       : "Unknown"
   );
 
-  const today = sorted.filter((item) => {
-    const thisDate = new Date(item.pickupDate);
-    const today = new Date();
-
-    return (
-      item.pickupDate &&
-      formatDateForInput(thisDate) === formatDateForInput(today)
-    );
-  });
+  const today = sorted.filter((item) => isToday(parseISO(item.pickupDate)));
 
   const subHeader = today.length > 0 && (
     <div className='p-4 border-b-4 mx-[-16px] last:border-none border-darkest-blue'>
@@ -115,9 +102,7 @@ function Display({ pickup }: { pickup: Pickup }) {
           height={100}
         />
       )}
-      <span>
-        {formatDate(new Date(pickup.pickupDate))}, {pickup.source}
-      </span>
+      <span>{pickup.source}</span>
     </Link>
   );
 }
