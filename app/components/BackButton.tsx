@@ -1,16 +1,17 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function BackButton() {
-  const router = useRouter();
+  const pathname = usePathname();
+
+  const url = pathname.substring(0, pathname.lastIndexOf("/"));
+
+  console.log(url);
+
   return (
-    <Button
-      variant='ghost'
-      className='inline-block'
-      onClick={() => router.back()}
-    >
+    <Link className='inline-block' href={url.length === 0 ? "/" : url}>
       Back
-    </Button>
+    </Link>
   );
 }

@@ -3,16 +3,10 @@ import { getDeliveries } from "../api/apiUtils";
 import { LoadingImage } from "../components/image";
 import { TemplatePage } from "../components/template-page";
 import { Delivery } from "../types/types";
-import {
-  formatDate,
-  formatDateForInput,
-  getTotal,
-  sortByDeliveryTime,
-} from "../utils/utils";
+import { formatDate, getTotal, sortByDeliveryTime } from "../utils/utils";
 import { Create } from "./create";
-import { DeliveryDisplay } from "./display";
 import groupBy from "lodash/groupBy";
-import { getDate, isToday, parseISO, toDate } from "date-fns";
+import { isToday, parseISO } from "date-fns";
 
 export default async function Deliveries() {
   const deliveries = await getDeliveries();
