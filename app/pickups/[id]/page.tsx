@@ -2,7 +2,7 @@ import { getPickup } from "@/app/api/apiUtils";
 import { TemplatePage } from "@/app/components/template-page";
 import { Create } from "../create";
 import { CopyButton } from "../copy-button";
-import { ImageCarousel } from "@/app/components/image-carousel";
+import { ImageGallery } from "@/app/components/image-gallery";
 import { formatDateForInput } from "@/app/utils/utils";
 import { DeleteButton } from "../delete-button";
 import { CouchDisplay } from "@/app/components/couch-display";
@@ -49,7 +49,7 @@ export default async function InventoryItem({
         <CouchDisplay couch={pickup.couch} />
         {pickup.images?.length > 0 && (
           <div className='flex items-center justify-center'>
-            <ImageCarousel urls={pickup.images} />
+            <ImageGallery urls={pickup.images} />
           </div>
         )}
       </div>

@@ -2,10 +2,10 @@ import { getDelivery, getInventoryItem } from "@/app/api/apiUtils";
 import { TemplatePage } from "@/app/components/template-page";
 import { Create } from "../create";
 import { CopyButton } from "../copy-button";
-import { ImageCarousel } from "@/app/components/image-carousel";
 import { formatDateForInput } from "@/app/utils/utils";
 import { DeleteButton } from "../delete-button";
 import { CouchDisplay } from "@/app/components/couch-display";
+import { ImageGallery } from "@/app/components/image-gallery";
 
 export default async function DeliveryItem({
   params,
@@ -61,7 +61,7 @@ export default async function DeliveryItem({
         <CouchDisplay couch={delivery.couch} />
         {delivery.images?.length > 0 && (
           <div className='flex items-center justify-center'>
-            <ImageCarousel urls={delivery.images} />
+            <ImageGallery urls={delivery.images} />
           </div>
         )}
       </div>

@@ -24,12 +24,7 @@ export function Chart<T extends object>({
 }) {
   return (
     <ResponsiveContainer width='100%' height={300}>
-      <BarChart
-        title='Delivery total month over month'
-        width={500}
-        height={300}
-        data={data}
-      >
+      <BarChart width={500} height={300} data={data}>
         <XAxis dataKey={xKey as string} />
         <YAxis
           tickFormatter={(value) => (format ? `${format}${value}` : value)}

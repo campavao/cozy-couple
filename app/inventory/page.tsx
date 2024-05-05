@@ -3,7 +3,7 @@ import { getInventory } from "../api/apiUtils";
 import { TemplatePage } from "../components/template-page";
 import { Create } from "./create";
 import { Inventory } from "../types/types";
-import { LoadingImage } from "../components/image";
+import { LoadingIcon } from "../components/image";
 
 export default async function InventoryPage() {
   const inventoryItems = await getInventory();
@@ -25,7 +25,7 @@ function Display({ item }: { item: Inventory }) {
   return (
     <Link href={`/inventory/${item.id}`} className='flex gap-2'>
       {firstImage && (
-        <LoadingImage
+        <LoadingIcon
           containerClassName='w-12 h-full rounded-lg overflow-hidden'
           className='w-full h-full rounded-lg object-center object-cover'
           src={firstImage}

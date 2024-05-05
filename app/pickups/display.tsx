@@ -12,8 +12,8 @@ import { CopyButton } from "./copy-button";
 import { formatDate, formatDateForInput } from "../utils/utils";
 import { Create } from "./create";
 import { DeleteButton } from "./delete-button";
-import { ImageCarousel } from "../components/image-carousel";
-import { LoadingImage } from "../components/image";
+import { ImageGallery } from "@/app/components/image-gallery";
+import { LoadingIcon } from "../components/image";
 
 export function PickupDisplay({ pickup }: { pickup: Pickup }) {
   const firstImage = pickup.images.find((img) => !img.includes(".mp4"));
@@ -22,7 +22,7 @@ export function PickupDisplay({ pickup }: { pickup: Pickup }) {
       <DrawerTrigger>
         <div className='flex gap-3'>
           {firstImage && (
-            <LoadingImage
+            <LoadingIcon
               containerClassName='w-12 h-12 rounded-lg overflow-hidden'
               className='w-full h-full rounded-lg object-center object-cover'
               src={firstImage}
@@ -70,7 +70,7 @@ export function PickupDisplay({ pickup }: { pickup: Pickup }) {
             </p>
             {pickup.images?.length > 0 && (
               <div className='flex items-center justify-center'>
-                <ImageCarousel urls={pickup.images} />
+                <ImageGallery urls={pickup.images} />
               </div>
             )}
           </div>

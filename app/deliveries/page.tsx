@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getDeliveries } from "../api/apiUtils";
-import { LoadingImage } from "../components/image";
+import { LoadingIcon } from "../components/image";
 import { TemplatePage } from "../components/template-page";
 import { Delivery } from "../types/types";
 import { formatDate, getTotal, sortByDeliveryTime } from "../utils/utils";
@@ -101,7 +101,7 @@ function Display({ delivery }: { delivery: Delivery }) {
   return (
     <Link href={`/deliveries/${delivery.id}`} className='flex gap-2'>
       {firstImage && (
-        <LoadingImage
+        <LoadingIcon
           containerClassName='w-12 h-full rounded-lg overflow-hidden'
           className='w-full h-full rounded-lg object-center object-cover'
           src={firstImage}

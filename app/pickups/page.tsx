@@ -4,7 +4,7 @@ import { TemplatePage } from "../components/template-page";
 import { Create } from "./create";
 import { formatDate, formatDateForInput, getTotal } from "../utils/utils";
 import { Pickup } from "../types/types";
-import { LoadingImage } from "../components/image";
+import { LoadingIcon } from "../components/image";
 import Link from "next/link";
 import { isToday, parseISO } from "date-fns";
 
@@ -92,7 +92,7 @@ function Display({ pickup }: { pickup: Pickup }) {
   return (
     <Link href={`/pickups/${pickup.id}`} className='flex gap-3'>
       {firstImage && (
-        <LoadingImage
+        <LoadingIcon
           containerClassName='w-12 h-12 rounded-lg overflow-hidden'
           className='w-full h-full rounded-lg object-center object-cover'
           src={firstImage}
