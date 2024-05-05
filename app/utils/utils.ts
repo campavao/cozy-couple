@@ -88,3 +88,32 @@ const setHourAndMinute = (date: Date, item: Delivery) => {
 
   return date;
 };
+
+export function getTotal<T extends object>(
+  items: T[] | [string, T[]][],
+  key: keyof T
+) {
+  let list: T[] = [];
+  if (isTupleOfStringAndArrayOfT(items)) {
+    list = items.flatMap(([_, i]) => i);
+  } else {
+    list = items as T[];
+  }
+
+  return list
+    .map((item) => item[key])
+    .reduce((acc, curr) => Number(acc) + Number(curr), 0);
+}
+
+function isTupleOfStringAndArrayOfT<T>(item: any): item is [string, T[]][] {
+  return (
+    Array.isArray(item) &&
+    item.length === 2 &&
+    typeof item[0] === "string" &&
+    isArrayOfT(item[1])
+  );
+}
+
+function isArrayOfT<T>(item: any): item is T[] {
+  return Array.isArray(item) && item.every((x: any) => typeof x === "number");
+}

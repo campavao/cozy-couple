@@ -2,7 +2,7 @@ import { groupBy } from "lodash";
 import { getPickups } from "../api/apiUtils";
 import { TemplatePage } from "../components/template-page";
 import { Create } from "./create";
-import { formatDate, formatDateForInput } from "../utils/utils";
+import { formatDate, formatDateForInput, getTotal } from "../utils/utils";
 import { Pickup } from "../types/types";
 import { LoadingImage } from "../components/image";
 import Link from "next/link";
@@ -56,9 +56,8 @@ export default async function Pickups() {
       subHeader={subHeader}
     >
       {Object.entries(byMonth).map(([month, dateValues], index) => {
-        const total = dateValues
-          .flatMap(([_, item]) => item.map((i) => i.amount))
-          .reduce((acc, curr) => Number(acc) + Number(curr), 0);
+        const total = getTotal<Pickup>(dateValues, "amount");
+
         return (
           <div
             className='p-4 border-b-4 mx-[-16px] last:border-none border-darkest-blue'

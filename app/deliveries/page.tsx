@@ -6,6 +6,7 @@ import { Delivery } from "../types/types";
 import {
   formatDate,
   formatDateForInput,
+  getTotal,
   sortByDeliveryTime,
 } from "../utils/utils";
 import { Create } from "./create";
@@ -68,9 +69,7 @@ export default async function Deliveries() {
       subHeader={subHeader}
     >
       {Object.entries(byMonth).map(([month, dateValues], index) => {
-        const total = dateValues
-          .flatMap(([_, item]) => item.map((i) => i.amount))
-          .reduce((acc, curr) => Number(acc) + Number(curr), 0);
+        const total = getTotal<Delivery>(dateValues, "amount");
 
         return (
           <div

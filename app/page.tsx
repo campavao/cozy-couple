@@ -14,6 +14,7 @@ async function Home() {
           <Link href='/deliveries'>Deliveries</Link>
           <Link href='/inventory'>Inventory</Link>
           <Link href='/pickups'>Pickups</Link>
+          <Link href='/analytics'>Analytics</Link>
           <Login isSignout />
         </div>
       ) : (
