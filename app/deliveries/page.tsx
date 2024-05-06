@@ -3,10 +3,16 @@ import { getDeliveries } from "../api/apiUtils";
 import { LoadingIcon } from "../components/image";
 import { TemplatePage } from "../components/template-page";
 import { Delivery } from "../types/types";
-import { formatDate, getTotal, sortByDeliveryTime } from "../utils/utils";
+import {
+  formatDate,
+  getTotal,
+  pluralize,
+  sortByDeliveryTime,
+} from "../utils/utils";
 import { Create } from "./create";
 import groupBy from "lodash/groupBy";
 import { isToday, parseISO } from "date-fns";
+import { TodayRoute } from "../components/today-route";
 
 export default async function Deliveries() {
   const deliveries = await getDeliveries();
@@ -40,13 +46,11 @@ export default async function Deliveries() {
     .filter((item) => isToday(parseISO(item.deliveryDate)))
     .sort(sortByDeliveryTime);
 
-  const routeUrl = today.map((item) => `&daddr=${item.address}`);
-
   const subHeader = today.length > 0 && (
     <div className='p-4 border-b-4 mx-[-16px] last:border-none border-darkest-blue'>
       <div className='flex justify-between'>
         <h2>Today</h2>
-        <a href={`maps://?dirflg=d${routeUrl}`}>Route</a>
+        <TodayRoute items={today} />
       </div>
       <div className='flex flex-col gap-4 items-start'>
         {today.map((delivery, tIndex) => (
@@ -64,6 +68,7 @@ export default async function Deliveries() {
     >
       {Object.entries(byMonth).map(([month, dateValues], index) => {
         const total = getTotal<Delivery>(dateValues, "amount");
+        const itemCount = dateValues.flatMap(([_, dels]) => dels).length;
 
         return (
           <div
@@ -72,7 +77,9 @@ export default async function Deliveries() {
           >
             <div className='flex justify-between gap-4 mb-4'>
               <h2 className='border-b-2 border-b-lightest-blue'>{month}</h2>
-              <p>${total}</p>
+              <p>
+                {itemCount} {pluralize("item", itemCount)} - ${total}
+              </p>
             </div>
             <div className='flex flex-col gap-6 items-start'>
               {dateValues.map(([date, deliveryItems], index) => (

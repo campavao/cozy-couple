@@ -114,3 +114,22 @@ function isTupleOfStringAndArrayOfT<T>(
 function isArrayOfT<T>(item: any): item is T[] {
   return Array.isArray(item) && item.every((x: any) => typeof x === "number");
 }
+
+export function isiOS() {
+  return (
+    [
+      "iPad Simulator",
+      "iPhone Simulator",
+      "iPod Simulator",
+      "iPad",
+      "iPhone",
+      "iPod",
+    ].includes(navigator.platform) ||
+    // iPad on iOS 13 detection
+    (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+  );
+}
+
+export function pluralize(word: string, count: number) {
+  return count > 1 ? word + 's' : word
+}

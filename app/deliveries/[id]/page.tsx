@@ -6,6 +6,7 @@ import { formatDateForInput } from "@/app/utils/utils";
 import { DeleteButton } from "../delete-button";
 import { CouchDisplay } from "@/app/components/couch-display";
 import { ImageGallery } from "@/app/components/image-gallery";
+import { Address } from "@/app/components/today-route";
 
 export default async function DeliveryItem({
   params,
@@ -25,10 +26,7 @@ export default async function DeliveryItem({
       }
     >
       <div className='flex flex-col gap-2 w-full py-4'>
-        <p>
-          <strong>Address:</strong>{" "}
-          <a href={`maps://?q=${delivery.address}`}>{delivery.address}</a>
-        </p>
+        <Address address={delivery.address} />
         {delivery.phone && (
           <a href={`tel:${delivery.phone}`} type='tel'>
             <strong>Phone:</strong> {delivery.phone}

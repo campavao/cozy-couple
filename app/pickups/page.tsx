@@ -2,11 +2,17 @@ import { groupBy } from "lodash";
 import { getPickups } from "../api/apiUtils";
 import { TemplatePage } from "../components/template-page";
 import { Create } from "./create";
-import { formatDate, formatDateForInput, getTotal } from "../utils/utils";
+import {
+  formatDate,
+  formatDateForInput,
+  getTotal,
+  pluralize,
+} from "../utils/utils";
 import { Pickup } from "../types/types";
 import { LoadingIcon } from "../components/image";
 import Link from "next/link";
 import { isToday, parseISO } from "date-fns";
+import { TodayRoute } from "../components/today-route";
 
 export default async function Pickups() {
   const pickups = await getPickups();
@@ -40,7 +46,10 @@ export default async function Pickups() {
 
   const subHeader = today.length > 0 && (
     <div className='p-4 border-b-4 mx-[-16px] last:border-none border-darkest-blue'>
-      <h2>Today</h2>
+      <div className='flex justify-between'>
+        <h2>Today</h2>
+        <TodayRoute items={today} />
+      </div>
       <div className='flex flex-col gap-4 items-start'>
         {today.map((item, tIndex) => (
           <Display pickup={item} key={tIndex + "today"} />
@@ -57,6 +66,7 @@ export default async function Pickups() {
     >
       {Object.entries(byMonth).map(([month, dateValues], index) => {
         const total = getTotal<Pickup>(dateValues, "amount");
+        const itemCount = dateValues.flatMap(([_, dels]) => dels).length;
 
         return (
           <div
@@ -65,7 +75,9 @@ export default async function Pickups() {
           >
             <div className='flex justify-between gap-4 mb-4'>
               <h2 className='border-b-2 border-b-lightest-blue'>{month}</h2>
-              <p>${total}</p>
+              <p>
+                {itemCount} {pluralize("item", itemCount)} - ${total}
+              </p>
             </div>
             <div className='flex flex-col gap-6 items-start'>
               {dateValues.map(([date, items], index) => (
@@ -101,7 +113,7 @@ function Display({ pickup }: { pickup: Pickup }) {
           height={100}
         />
       )}
-      <span>{pickup.source}</span>
+      <span>{pickup.address}</span>
     </Link>
   );
 }

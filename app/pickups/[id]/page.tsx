@@ -6,6 +6,7 @@ import { ImageGallery } from "@/app/components/image-gallery";
 import { formatDateForInput } from "@/app/utils/utils";
 import { DeleteButton } from "../delete-button";
 import { CouchDisplay } from "@/app/components/couch-display";
+import { Address } from "@/app/components/today-route";
 
 export default async function InventoryItem({
   params,
@@ -25,13 +26,17 @@ export default async function InventoryItem({
       }
     >
       <div className='flex flex-col gap-2 w-full py-4'>
-        <a
-          href={"https://" + pickup.link}
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <strong>Link:</strong> {pickup.link ?? "None"}
-        </a>
+        <Address address={pickup.address} />
+
+        {pickup.link && (
+          <a
+            href={"https://" + pickup.link}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            <strong>Link:</strong> {pickup.link ?? "None"}
+          </a>
+        )}
         <p>
           <strong>Pickup Date:</strong>{" "}
           {pickup.pickupDate != null && pickup.pickupDate != ""
@@ -39,13 +44,22 @@ export default async function InventoryItem({
             : "None"}
         </p>
 
+        {pickup.pickupWindow && (
+          <p>
+            <strong>Pickup Window:</strong> {pickup.pickupWindow.from} -{" "}
+            {pickup.pickupWindow.to}
+          </p>
+        )}
+
         <CopyButton text={pickup.description} />
         <p>
           <strong>Amount:</strong> ${pickup.amount ?? 0}
         </p>
-        <p>
-          <strong>Source:</strong> {pickup.source ?? "None"}
-        </p>
+        {pickup.source && (
+          <p>
+            <strong>Source:</strong> {pickup.source}
+          </p>
+        )}
         <CouchDisplay couch={pickup.couch} />
         {pickup.images?.length > 0 && (
           <div className='flex items-center justify-center'>
