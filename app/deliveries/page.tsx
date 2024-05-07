@@ -115,6 +115,10 @@ function Display({ delivery }: { delivery: Delivery }) {
           alt=''
           width={100}
           height={100}
+          item={{
+            ...delivery,
+            type: "delivery",
+          }}
         />
       )}
       <div className='flex flex-col gap-1 text-left'>

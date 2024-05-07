@@ -11,11 +11,13 @@ import {
 import { FormEventHandler, useCallback, useState } from "react";
 import { Delivery } from "../types/types";
 import { SubmitButton } from "../components/SubmitButton";
-import { formatDateForInput, uploadImage } from "../utils/utils";
+import { formatDateForInput } from "../utils/utils";
 import { useRouter } from "next/navigation";
 import { CouchForm, getCouchValues } from "../components/couch-form";
 import { Select } from "../components/select";
 import { Input } from "../components/input";
+import { uploadImage } from "../utils/imageUtils";
+import { v4 as uuid } from "uuid";
 
 interface Create {
   label?: string;
@@ -37,9 +39,11 @@ export function Create({
       e.preventDefault();
       setLoading(true);
       const data = e.target as any;
+      const id = existingDelivery?.id ?? uuid();
 
       const delivery: Partial<Delivery> = {
         ...existingDelivery,
+        id,
         address: data.address.value,
         phone: data.phone.value,
         name: data.nameOfPerson.value,
@@ -58,11 +62,11 @@ export function Create({
 
       if (files.length > 0) {
         const urls = await Promise.all(
-          files.map((file) => uploadImage(file as File))
+          files.map((file) => uploadImage(file as File, id))
         );
         const previousUrls = structuredClone(existingDelivery?.images ?? []);
-        previousUrls.push(...urls);
-        delivery.images = previousUrls;
+        const uniqueUrls = new Set([...previousUrls, ...urls]);
+        delivery.images = Array.from(uniqueUrls);
       }
 
       try {

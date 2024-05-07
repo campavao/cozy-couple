@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Delivery, Pickup } from "../types/types";
 import { isiOS } from "../utils/utils";
 
@@ -8,17 +8,28 @@ export function TodayRoute<T extends Delivery | Pickup>({
 }: {
   items: T[];
 }) {
-  const routeUrl = useMemo(() => {
+  const [routeUrl, setRouteUrl] = useState<string>();
+  useEffect(() => {
     if (isiOS()) {
       const addresses = items.map((item) => `&daddr=${item.address}`);
-      return `maps://?dirflg=d${addresses}`;
+      setRouteUrl(`maps://?dirflg=d${addresses}`);
     } else {
       const addresses = items.map((item) => `/${item.address}`);
-      return `https://www.google.com/maps/dir/Current+Location${addresses}`;
+      setRouteUrl(
+        `https://www.google.com/maps/dir/Current+Location${addresses}`
+      );
     }
   }, [items]);
 
-  return <a href={routeUrl}>Route</a>;
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <a href={routeUrl} target='_blank' rel='noopener noreferrer'>
+      Route
+    </a>
+  );
 }
 
 export function Address({ address }: { address: string }) {

@@ -35,7 +35,10 @@ export default async function InventoryItem({
         <CouchDisplay couch={item.couch} />
         {item.images?.length > 0 && (
           <div className='flex items-center justify-center'>
-            <ImageGallery urls={item.images} />
+            <ImageGallery
+              urls={item.images}
+              item={{ ...item, type: "inventory" }}
+            />
           </div>
         )}
       </div>

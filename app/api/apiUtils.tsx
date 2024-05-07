@@ -13,7 +13,16 @@ import {
   UserId,
 } from "../types/types";
 import { v4 as uuid } from "uuid";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { startOfToday } from "date-fns";
+import { formatDateForInput } from "../utils/utils";
+
+import Ffmpeg from "fluent-ffmpeg";
+import { PassThrough, Readable } from "stream";
+import {
+  getDownloadURL,
+  StorageReference,
+  uploadBytes,
+} from "firebase/storage";
 
 export const getUserId = cache(async (): Promise<UserId> => {
   const session = await getServerSession(authOptions);
@@ -29,12 +38,9 @@ export const getUserId = cache(async (): Promise<UserId> => {
 // GETTERS
 export const getDeliveries = async () => {
   const userId = await getUserId();
-  const deliveries = await getDocuments<Delivery>(
-    "deliveries",
-    "userId",
-    "==",
-    userId
-  );
+  const deliveries = await getDocuments<Delivery>("deliveries", [
+    { fieldPath: "userId", opStr: "==", value: userId },
+  ]);
   return deliveries;
 };
 
@@ -51,12 +57,9 @@ export const getDelivery = cache(async (id: string): Promise<Delivery> => {
 
 export const getInventory = cache(async () => {
   const userId = await getUserId();
-  const items = await getDocuments<Inventory>(
-    "inventory",
-    "userId",
-    "==",
-    userId
-  );
+  const items = await getDocuments<Inventory>("inventory", [
+    { fieldPath: "userId", opStr: "==", value: userId },
+  ]);
   return items;
 });
 
@@ -75,7 +78,9 @@ export const getInventoryItem = cache(
 
 export const getPickups = cache(async () => {
   const userId = await getUserId();
-  const pickups = await getDocuments<Pickup>("pickups", "userId", "==", userId);
+  const pickups = await getDocuments<Pickup>("pickups", [
+    { fieldPath: "userId", opStr: "==", value: userId },
+  ]);
   return pickups;
 });
 
@@ -89,6 +94,28 @@ export const getPickup = cache(async (id: string): Promise<Pickup> => {
     id,
   } as Pickup;
 });
+
+export const getTodaysItems = cache(
+  async (): Promise<{ deliveries: Delivery[]; pickups: Pickup[] }> => {
+    const userId = await getUserId();
+    const today = formatDateForInput(startOfToday());
+
+    const deliveries = await getDocuments<Delivery>("deliveries", [
+      { fieldPath: "userId", opStr: "==", value: userId },
+      { fieldPath: "deliveryDate", opStr: "==", value: today },
+    ]);
+
+    const pickups = await getDocuments<Pickup>("pickups", [
+      { fieldPath: "userId", opStr: "==", value: userId },
+      { fieldPath: "pickupDate", opStr: "==", value: today },
+    ]);
+
+    return {
+      deliveries,
+      pickups,
+    };
+  }
+);
 
 // UPSERTERS
 export async function upsertDelivery(delivery: Partial<DeliveryUpload>) {
@@ -143,4 +170,23 @@ export async function deletePickup(pickupId: string) {
 // UTIL
 export function getRandomId() {
   return uuid();
+}
+
+export async function compressVideo(video: File, storageRef: StorageReference) {
+  const file = await video.arrayBuffer();
+  let bufferStream = new PassThrough();
+  const readable = new Readable();
+  readable.push(file);
+  const command = Ffmpeg(readable);
+  command.fps(30).addOptions(["-crf 28"]).writeToStream(bufferStream);
+  const buffers: Buffer[] = [];
+  bufferStream.on("data", function (buf) {
+    buffers.push(buf);
+  });
+  bufferStream.on("end", async () => {
+    const outputBuffer = Buffer.concat(buffers);
+    await uploadBytes(storageRef, outputBuffer);
+    const url = await getDownloadURL(storageRef);
+    return url;
+  });
 }

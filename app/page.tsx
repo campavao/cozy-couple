@@ -11,6 +11,7 @@ async function Home() {
       <h1 className='font-bold text-lg'>Cozy Couple</h1>
       {session ? (
         <div className='flex flex-col gap-4 text-center'>
+          <Link href='/today'>Today</Link>
           <Link href='/deliveries'>Deliveries</Link>
           <Link href='/inventory'>Inventory</Link>
           <Link href='/pickups'>Pickups</Link>

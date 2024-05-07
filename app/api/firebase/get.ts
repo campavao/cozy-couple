@@ -1,5 +1,6 @@
 import {
   collection,
+  FieldPath,
   getDocs,
   getFirestore,
   query,
@@ -12,14 +13,16 @@ const db = getFirestore(firebase_app);
 
 export async function getDocuments<T extends object>(
   collectionString: string,
-  fieldPath: string,
-  opStr: WhereFilterOp,
-  value: unknown
+  conditions: {
+    fieldPath: string | FieldPath;
+    opStr: WhereFilterOp;
+    value: unknown;
+  }[]
 ): Promise<T[]> {
-  const collectionRef = query(
-    collection(db, collectionString),
+  const wheres = conditions.map(({ fieldPath, opStr, value }) =>
     where(fieldPath, opStr, value)
   );
+  const collectionRef = query(collection(db, collectionString), ...wheres);
 
   try {
     const result = await getDocs(collectionRef);

@@ -1,6 +1,7 @@
+import { Item } from "../types/types";
 import { LoadingImage } from "./image";
 
-export function ImageGallery({ urls }: { urls: string[] }) {
+export function ImageGallery({ urls, item }: { urls: string[]; item: Item }) {
   return (
     <div className='grid grid-cols-3 gap-2'>
       {urls.map((url, index) =>
@@ -23,6 +24,7 @@ export function ImageGallery({ urls }: { urls: string[] }) {
             width={300}
             height={500}
             key={index}
+            item={item}
           />
         )
       )}

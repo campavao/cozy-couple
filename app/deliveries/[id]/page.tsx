@@ -59,7 +59,10 @@ export default async function DeliveryItem({
         <CouchDisplay couch={delivery.couch} />
         {delivery.images?.length > 0 && (
           <div className='flex items-center justify-center'>
-            <ImageGallery urls={delivery.images} />
+            <ImageGallery
+              urls={delivery.images}
+              item={{ ...delivery, type: "delivery" }}
+            />
           </div>
         )}
       </div>

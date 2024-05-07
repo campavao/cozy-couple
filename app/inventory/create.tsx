@@ -11,10 +11,11 @@ import {
 import { FormEventHandler, useCallback, useState } from "react";
 import { Inventory } from "../types/types";
 import { SubmitButton } from "../components/SubmitButton";
-import { uploadImage } from "../utils/utils";
 import { useRouter } from "next/navigation";
 import { CouchForm, getCouchValues } from "../components/couch-form";
 import { Input } from "../components/input";
+import { uploadImage } from "../utils/imageUtils";
+import { v4 as uuid } from "uuid";
 
 interface Create {
   label?: string;
@@ -32,9 +33,11 @@ export function Create({ label = "Create", className, existingItem }: Create) {
       e.preventDefault();
       setLoading(true);
       const data = e.target as any;
+      const id = existingItem?.id ?? uuid();
 
       const item: Partial<Inventory> = {
         ...existingItem,
+        id,
         displayName: data.displayName.value,
         description: data.description.value,
         amount: data.amount.value,
@@ -45,11 +48,11 @@ export function Create({ label = "Create", className, existingItem }: Create) {
 
       if (files.length > 0) {
         const urls = await Promise.all(
-          files.map((file) => uploadImage(file as File))
+          files.map((file) => uploadImage(file as File, id))
         );
         const previousUrls = structuredClone(existingItem?.images ?? []);
-        previousUrls.push(...urls);
-        item.images = previousUrls;
+        const uniqueUrls = new Set([...previousUrls, ...urls]);
+        item.images = Array.from(uniqueUrls);
       }
 
       try {

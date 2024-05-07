@@ -11,11 +11,13 @@ import {
 import { FormEventHandler, useCallback, useState } from "react";
 import { Pickup } from "../types/types";
 import { SubmitButton } from "../components/SubmitButton";
-import { formatDateForInput, uploadImage } from "../utils/utils";
+import { formatDateForInput } from "../utils/utils";
 import { useRouter } from "next/navigation";
 import { Input } from "../components/input";
 import { Select } from "../components/select";
 import { CouchForm, getCouchValues } from "../components/couch-form";
+import { uploadImage } from "../utils/imageUtils";
+import { v4 as uuid } from "uuid";
 
 interface Create {
   label?: string;
@@ -37,9 +39,11 @@ export function Create({
       e.preventDefault();
       setLoading(true);
       const data = e.target as any;
+      const id = existingPickup?.id ?? uuid();
 
       const pickup: Partial<Pickup> = {
         ...existingPickup,
+        id,
         address: data.address.value,
         pickupDate: data.pickupDate.value,
         pickupWindow: {
@@ -57,11 +61,11 @@ export function Create({
 
       if (files.length > 0) {
         const urls = await Promise.all(
-          files.map((file) => uploadImage(file as File))
+          files.map((file) => uploadImage(file as File, id))
         );
         const previousUrls = structuredClone(existingPickup?.images ?? []);
-        previousUrls.push(...urls);
-        pickup.images = previousUrls;
+        const uniqueUrls = new Set([...previousUrls, ...urls]);
+        pickup.images = Array.from(uniqueUrls);
       }
 
       try {

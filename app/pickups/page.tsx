@@ -111,6 +111,10 @@ function Display({ pickup }: { pickup: Pickup }) {
           alt=''
           width={100}
           height={100}
+          item={{
+            ...pickup,
+            type: "pickup",
+          }}
         />
       )}
       <span>{pickup.address}</span>

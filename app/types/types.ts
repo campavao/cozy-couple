@@ -58,4 +58,16 @@ export const COUNT_TYPES = [
 
 type CouchType = typeof COUNT_TYPES;
 
-export type Item = Delivery | Pickup | Inventory
+interface DeliveryItem extends Delivery {
+  type: "delivery";
+}
+
+interface PickupItem extends Pickup {
+  type: "pickup";
+}
+
+interface InventoryItem extends Inventory {
+  type: "inventory";
+}
+
+export type Item = DeliveryItem | PickupItem | InventoryItem;

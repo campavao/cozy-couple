@@ -32,6 +32,10 @@ function Display({ item }: { item: Inventory }) {
           alt=''
           width={100}
           height={100}
+          item={{
+            ...item,
+            type: "inventory",
+          }}
         />
       )}
       <div className='flex flex-col gap-1 text-left'>

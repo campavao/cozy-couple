@@ -20,7 +20,11 @@
     "copy-to-clipboard": "^3.3.3",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.0.2",
+    "ffmpeg": "^0.0.4",
     "firebase": "^10.9.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs": "^0.0.1-security",
+    "jimp": "^0.22.12",
     "lodash": "^4.17.21",
     "lucide-react": "^0.368.0",
     "next": "14.0.3",
@@ -35,6 +39,8 @@
     "web-push": "^3.6.7"
   },
   "devDependencies": {
+    "@types/ffmpeg": "^1.0.7",
+    "@types/fluent-ffmpeg": "^2.1.24",
     "@types/lodash": "^4.17.0",
     "@types/node": "^20.10.1",
     "@types/quill": "^2.0.14",

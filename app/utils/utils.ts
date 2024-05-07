@@ -6,7 +6,7 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
-import { Delivery } from "../types/types";
+import { Delivery, Item, Pickup } from "../types/types";
 import { parseISO } from "date-fns";
 
 export function formatDate(date: Date) {
@@ -42,14 +42,6 @@ export function formatDateForInput(date: Date) {
   return date.toISOString().split("T")[0];
 }
 
-export async function uploadImage(image: File) {
-  const storage = getStorage(firebase_app);
-  const storageRef = ref(storage, `images/${image.name}`);
-  await uploadBytes(storageRef, image);
-  const url = await getDownloadURL(storageRef);
-  return url;
-}
-
 export async function deleteImage(name: string) {
   const storage = getStorage(firebase_app);
   const storageRef = ref(storage, `images/${name}`);
@@ -67,15 +59,48 @@ export const sortByDeliveryTime = (itemA: Delivery, itemB: Delivery) => {
     return -1;
   }
 
-  const dateA = setHourAndMinute(parseISO(a), itemA);
-  const dateB = setHourAndMinute(parseISO(b), itemB);
+  const dateA = setHourAndMinuteDelivery(parseISO(a), itemA);
+  const dateB = setHourAndMinuteDelivery(parseISO(b), itemB);
 
   return dateA.getTime() - dateB.getTime();
 };
 
-const setHourAndMinute = (date: Date, item: Delivery) => {
+export const sortByPickupTime = (itemA: Pickup, itemB: Pickup) => {
+  const a = itemA.pickupDate;
+  const b = itemB.pickupDate;
+
+  if (!a) {
+    return 1;
+  }
+  if (!b) {
+    return -1;
+  }
+
+  const dateA = setHourAndMinutePickup(parseISO(a), itemA);
+  const dateB = setHourAndMinutePickup(parseISO(b), itemB);
+
+  return dateA.getTime() - dateB.getTime();
+};
+
+const setHourAndMinuteDelivery = (date: Date, item: Delivery) => {
   if (item.deliveryWindow.from) {
     const [hourString, minuteWithAmPm] = item.deliveryWindow.from.split(":");
+    let hour = Number(hourString);
+    const [minute, amOrPm] = minuteWithAmPm.split(" ");
+    if (amOrPm === "PM" && hour !== 12) {
+      hour += 12;
+    }
+
+    date.setUTCHours(hour);
+    date.setUTCMinutes(Number(minute));
+  }
+
+  return date;
+};
+
+const setHourAndMinutePickup = (date: Date, item: Pickup) => {
+  if (item.pickupWindow.from) {
+    const [hourString, minuteWithAmPm] = item.pickupWindow.from.split(":");
     let hour = Number(hourString);
     const [minute, amOrPm] = minuteWithAmPm.split(" ");
     if (amOrPm === "PM" && hour !== 12) {
@@ -131,5 +156,16 @@ export function isiOS() {
 }
 
 export function pluralize(word: string, count: number) {
-  return count > 1 ? word + 's' : word
+  return count > 1 ? word + "s" : word;
+}
+
+export function getUrlBase(item: Item) {
+  switch (item.type) {
+    case "delivery":
+      return "deliveries";
+    case "pickup":
+      return "pickups";
+    default:
+      return item.type;
+  }
 }
