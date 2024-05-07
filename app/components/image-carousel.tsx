@@ -6,8 +6,9 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { LoadingImage } from "./image";
+import { Item } from "../types/types";
 
-export function ImageCarousel({ urls }: { urls: string[] }) {
+export function ImageCarousel({ urls, item }: { urls: string[]; item: Item }) {
   return (
     <Carousel
       opts={{
@@ -39,6 +40,7 @@ export function ImageCarousel({ urls }: { urls: string[] }) {
                   alt=''
                   width={300}
                   height={500}
+                  item={item}
                 />
               </a>
             )}
