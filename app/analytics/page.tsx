@@ -256,7 +256,7 @@ function ChartCard<T extends object>(props: {
   );
 }
 
-function CouchCard<T extends Item>(props: {
+function CouchCard<T extends Delivery>(props: {
   title: string;
   list: T[];
   groupKey: keyof Couch;
