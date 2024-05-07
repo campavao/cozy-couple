@@ -169,3 +169,23 @@ export function getUrlBase(item: Item) {
       return item.type;
   }
 }
+
+export function fileType(url: string) {
+  const lower = url.toLowerCase();
+  if (lower.includes("mov") || lower.includes("quicktime")) {
+    return "quicktime";
+  }
+  if (lower.includes("mp4")) {
+    return "mp4";
+  }
+  if (lower.includes("png")) {
+    return "png";
+  }
+
+  return "jpeg";
+}
+
+export function isVideo(url: string) {
+  const type = fileType(url);
+  return type === "quicktime" || type === "mp4";
+}

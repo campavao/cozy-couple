@@ -8,12 +8,12 @@ import {
   getTotal,
   pluralize,
   sortByDeliveryTime,
+  isVideo
 } from "../utils/utils";
 import { Create } from "./create";
 import groupBy from "lodash/groupBy";
 import { isToday, parseISO } from "date-fns";
 import { TodayRoute } from "../components/today-route";
-import { isVideo } from "../utils/imageUtils";
 
 export default async function Deliveries() {
   const deliveries = await getDeliveries();

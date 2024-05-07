@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import { LoadingImage } from "./image";
 import { Item } from "../types/types";
-import { fileType, isVideo } from "../utils/imageUtils";
+import { fileType, isVideo } from "../utils/utils";
 
 export function ImageCarousel({ urls, item }: { urls: string[]; item: Item }) {
   return (

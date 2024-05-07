@@ -4,7 +4,7 @@ import { TemplatePage } from "../components/template-page";
 import { Create } from "./create";
 import { Inventory } from "../types/types";
 import { LoadingIcon } from "../components/image";
-import { isVideo } from "../utils/imageUtils";
+import { isVideo } from "../utils/utils";
 
 export default async function InventoryPage() {
   const inventoryItems = await getInventory();

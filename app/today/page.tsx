@@ -6,7 +6,7 @@ import { Delivery, Pickup } from "../types/types";
 import { TodayRoute } from "../components/today-route";
 import { parseISO } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { isVideo } from "../utils/imageUtils";
+import { isVideo } from "../utils/utils";
 
 export default async function TodayPage() {
   const todaysItems = await getTodaysItems();

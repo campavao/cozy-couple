@@ -9,6 +9,7 @@ import {
 import "jimp";
 import firebase_app from "../api/firebase/firebase.config";
 import { compressVideo } from "../api/apiUtils";
+import { isVideo } from "./utils";
 const { Jimp } = window as any;
 
 export async function uploadImage(image: File, itemId: string) {
@@ -18,7 +19,7 @@ export async function uploadImage(image: File, itemId: string) {
 
   if (isVideo(image.type)) {
     // await compressVideo(image, storageRef);
-    await uploadBytes(storageRef, file);
+    await uploadBytes(storageRef, image);
   } else {
     const smallerImage = await Jimp.read(Buffer.from(file)).then((img: any) => {
       return img.resize(600, Jimp.AUTO).quality(60);
@@ -30,22 +31,4 @@ export async function uploadImage(image: File, itemId: string) {
   return url;
 }
 
-export function fileType(url: string) {
-  const lower = url.toLowerCase();
-  if (lower.includes(".mov")) {
-    return "mov";
-  }
-  if (lower.includes(".mp4")) {
-    return "mp4";
-  }
-  if (lower.includes(".png")) {
-    return "png";
-  }
 
-  return "jpeg";
-}
-
-export function isVideo(url: string) {
-  const type = fileType(url);
-  return type === "mov" || type === "mp4";
-}

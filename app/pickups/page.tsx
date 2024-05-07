@@ -2,18 +2,12 @@ import { groupBy } from "lodash";
 import { getPickups } from "../api/apiUtils";
 import { TemplatePage } from "../components/template-page";
 import { Create } from "./create";
-import {
-  formatDate,
-  formatDateForInput,
-  getTotal,
-  pluralize,
-} from "../utils/utils";
+import { formatDate, getTotal, pluralize, isVideo } from "../utils/utils";
 import { Pickup } from "../types/types";
 import { LoadingIcon } from "../components/image";
 import Link from "next/link";
 import { isToday, parseISO } from "date-fns";
 import { TodayRoute } from "../components/today-route";
-import { isVideo } from "../utils/imageUtils";
 
 export default async function Pickups() {
   const pickups = await getPickups();

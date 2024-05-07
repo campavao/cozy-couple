@@ -1,5 +1,5 @@
 import { Item } from "../types/types";
-import { fileType, isVideo } from "../utils/imageUtils";
+import { isVideo, fileType } from "../utils/utils";
 import { LoadingImage } from "./image";
 
 export function ImageGallery({ urls, item }: { urls: string[]; item: Item }) {
