@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import { LoadingImage } from "./image";
 import { Item } from "../types/types";
+import { fileType, isVideo } from "../utils/imageUtils";
 
 export function ImageCarousel({ urls, item }: { urls: string[]; item: Item }) {
   return (
@@ -22,7 +23,7 @@ export function ImageCarousel({ urls, item }: { urls: string[]; item: Item }) {
             className='basis relative flex items-center justify-center'
             key={index}
           >
-            {url.includes(".mp4") ? (
+            {isVideo(url) ? (
               <video
                 muted
                 controls
@@ -30,7 +31,7 @@ export function ImageCarousel({ urls, item }: { urls: string[]; item: Item }) {
                 height={500}
                 className='md:max-h-[250px] w-full rounded-lg object-contain'
               >
-                <source src={url} type='video/mp4' />
+                <source src={url} type={`video/${fileType(url)}`} />
               </video>
             ) : (
               <a href={url} target='_blank' rel='noopener noreferrer'>

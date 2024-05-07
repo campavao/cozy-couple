@@ -13,6 +13,7 @@ import { Create } from "./create";
 import groupBy from "lodash/groupBy";
 import { isToday, parseISO } from "date-fns";
 import { TodayRoute } from "../components/today-route";
+import { isVideo } from "../utils/imageUtils";
 
 export default async function Deliveries() {
   const deliveries = await getDeliveries();
@@ -103,7 +104,7 @@ export default async function Deliveries() {
 }
 
 function Display({ delivery }: { delivery: Delivery }) {
-  const firstImage = delivery.images?.find((img) => !img.includes(".mp4"));
+  const firstImage = delivery.images?.find((img) => !isVideo(img));
 
   return (
     <Link href={`/deliveries/${delivery.id}`} className='flex gap-2'>

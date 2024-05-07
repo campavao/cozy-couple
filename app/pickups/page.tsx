@@ -13,6 +13,7 @@ import { LoadingIcon } from "../components/image";
 import Link from "next/link";
 import { isToday, parseISO } from "date-fns";
 import { TodayRoute } from "../components/today-route";
+import { isVideo } from "../utils/imageUtils";
 
 export default async function Pickups() {
   const pickups = await getPickups();
@@ -99,7 +100,7 @@ export default async function Pickups() {
 }
 
 function Display({ pickup }: { pickup: Pickup }) {
-  const firstImage = pickup.images.find((img) => !img.includes(".mp4"));
+  const firstImage = pickup.images.find((img) => !isVideo(img));
 
   return (
     <Link href={`/pickups/${pickup.id}`} className='flex gap-3'>

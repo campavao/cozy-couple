@@ -16,7 +16,7 @@ export async function uploadImage(image: File, itemId: string) {
   const file = await image.arrayBuffer();
   const storageRef = ref(storage, `images/${itemId}/${image.name}`);
 
-  if (image.type.includes("mp4")) {
+  if (isVideo(image.type)) {
     // await compressVideo(image, storageRef);
     await uploadBytes(storageRef, file);
   } else {
@@ -28,4 +28,24 @@ export async function uploadImage(image: File, itemId: string) {
   }
   const url = await getDownloadURL(storageRef);
   return url;
+}
+
+export function fileType(url: string) {
+  const lower = url.toLowerCase();
+  if (lower.includes(".mov")) {
+    return "mov";
+  }
+  if (lower.includes(".mp4")) {
+    return "mp4";
+  }
+  if (lower.includes(".png")) {
+    return "png";
+  }
+
+  return "jpeg";
+}
+
+export function isVideo(url: string) {
+  const type = fileType(url);
+  return type === "mov" || type === "mp4";
 }

@@ -6,6 +6,7 @@ import { Delivery, Pickup } from "../types/types";
 import { TodayRoute } from "../components/today-route";
 import { parseISO } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { isVideo } from "../utils/imageUtils";
 
 export default async function TodayPage() {
   const todaysItems = await getTodaysItems();
@@ -42,7 +43,7 @@ interface PickupItem extends Pickup {
 type TodayItem = DeliveryItem | PickupItem;
 
 function Display({ item }: { item: TodayItem }) {
-  const firstImage = item.images?.find((img) => !img.includes(".mp4"));
+  const firstImage = item.images?.find((img) => !isVideo(img));
   const base = item.type === "delivery" ? "deliveries" : "pickups";
   const window =
     item.type === "delivery" ? item.deliveryWindow : item.pickupWindow;

@@ -1,11 +1,12 @@
 import { Item } from "../types/types";
+import { fileType, isVideo } from "../utils/imageUtils";
 import { LoadingImage } from "./image";
 
 export function ImageGallery({ urls, item }: { urls: string[]; item: Item }) {
   return (
     <div className='grid grid-cols-3 gap-2'>
       {urls.map((url, index) =>
-        url.includes(".mp4") ? (
+        isVideo(url) ? (
           <video
             key={index}
             muted
@@ -14,7 +15,7 @@ export function ImageGallery({ urls, item }: { urls: string[]; item: Item }) {
             height={500}
             className='rounded-lg object-contain'
           >
-            <source src={url} type='video/mp4' />
+            <source src={url} type={`video/${fileType(url)}`} />
           </video>
         ) : (
           <LoadingImage
