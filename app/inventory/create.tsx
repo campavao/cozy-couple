@@ -17,6 +17,7 @@ import { Input } from "../components/input";
 import { uploadImage } from "../utils/imageUtils";
 import { v4 as uuid } from "uuid";
 import { formatDateForInput } from "../utils/utils";
+import { PlusIcon, EditIcon } from "lucide-react";
 
 interface Create {
   label?: string;
@@ -73,6 +74,8 @@ export function Create({ label = "Create", className, existingItem }: Create) {
     [existingItem, router]
   );
 
+  const Icon = label === "Create" ? PlusIcon : EditIcon;
+
   return (
     <Sheet
       open={open}
@@ -83,11 +86,12 @@ export function Create({ label = "Create", className, existingItem }: Create) {
     >
       <SheetTrigger asChild>
         <Button
-          variant='default'
-          className={className}
+          variant='link'
+          className='p-0'
+          title={label}
           onClick={() => setOpen(true)}
         >
-          {label}
+          <Icon color='white' />
         </Button>
       </SheetTrigger>
       <SheetContent side='bottom' className='flex flex-col w-full items-center'>

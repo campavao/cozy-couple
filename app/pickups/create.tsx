@@ -18,7 +18,7 @@ import { Select } from "../components/select";
 import { CouchForm, getCouchValues } from "../components/couch-form";
 import { uploadImage } from "../utils/imageUtils";
 import { v4 as uuid } from "uuid";
-
+import { EditIcon, PlusIcon } from "lucide-react";
 interface Create {
   label?: string;
   className?: string;
@@ -84,6 +84,8 @@ export function Create({
     [existingPickup, router]
   );
 
+  const Icon = label === "Create" ? PlusIcon : EditIcon;
+
   return (
     <Sheet
       open={open}
@@ -94,11 +96,12 @@ export function Create({
     >
       <SheetTrigger asChild>
         <Button
-          variant='default'
-          className={className}
+          variant='link'
+          className='p-0'
+          title={label}
           onClick={() => setOpen(true)}
         >
-          {label}
+          <Icon color='white' />
         </Button>
       </SheetTrigger>
       <SheetContent side='bottom' className='flex flex-col w-full items-center'>

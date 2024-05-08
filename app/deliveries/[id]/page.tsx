@@ -18,12 +18,7 @@ export default async function DeliveryItem({
   return (
     <TemplatePage
       title='Delivery Item'
-      rightButton={
-        <div className='flex gap-4'>
-          <DeleteButton id={delivery.id} />
-          <Create label='Edit' existingDelivery={delivery} />
-        </div>
-      }
+      rightButton={<Create label='Edit' existingDelivery={delivery} />}
     >
       <div className='flex flex-col gap-2 w-full py-4'>
         <Address address={delivery.address} />
@@ -65,6 +60,7 @@ export default async function DeliveryItem({
             />
           </div>
         )}
+        <DeleteButton id={delivery.id} />
       </div>
     </TemplatePage>
   );

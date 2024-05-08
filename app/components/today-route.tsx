@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Delivery, Pickup } from "../types/types";
 import { isiOS } from "../utils/utils";
+import { RouteIcon } from "lucide-react";
 
 export function TodayRoute<T extends Delivery | Pickup>({
   items,
@@ -27,7 +28,7 @@ export function TodayRoute<T extends Delivery | Pickup>({
 
   return (
     <a href={routeUrl} target='_blank' rel='noopener noreferrer'>
-      Route
+      <RouteIcon />
     </a>
   );
 }

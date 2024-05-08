@@ -21,12 +21,7 @@ export default async function InventoryItem({
   return (
     <TemplatePage
       title='Pickup Item'
-      rightButton={
-        <div className='flex gap-4'>
-          <DeleteButton id={pickup.id} />
-          <Create label='Edit' existingPickup={pickup} />
-        </div>
-      }
+      rightButton={<Create label='Edit' existingPickup={pickup} />}
     >
       <div className='flex flex-col gap-2 w-full py-4'>
         <Address address={pickup.address} />
@@ -73,6 +68,7 @@ export default async function InventoryItem({
             />
           </div>
         )}
+        <DeleteButton id={pickup.id} />
       </div>
     </TemplatePage>
   );

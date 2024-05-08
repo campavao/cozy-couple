@@ -1,3 +1,3 @@
-# Cozy Couple
+# FlipTrack
 
-A website built to help track and process couch orders for a friend
+An easy way to manage and track your inventory, deliveries, and couch pickups

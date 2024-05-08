@@ -17,12 +17,7 @@ export default async function InventoryItem({
   return (
     <TemplatePage
       title='Inventory Item'
-      rightButton={
-        <div className='flex gap-4'>
-          <DeleteButton id={item.id} />
-          <Create label='Edit' existingItem={item} />
-        </div>
-      }
+      rightButton={<Create label='Edit' existingItem={item} />}
     >
       <div className='flex flex-col gap-2 w-full py-4'>
         <p>
@@ -51,6 +46,7 @@ export default async function InventoryItem({
             />
           </div>
         )}
+        <DeleteButton id={item.id} />
       </div>
     </TemplatePage>
   );

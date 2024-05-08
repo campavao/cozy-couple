@@ -21,7 +21,11 @@ export function TemplatePage({
           isWide ? "max-w-none" : "max-w-xl"
         }`}
       >
-        <h1>{title}</h1>
+        <div className='flex items-center justify-between'>
+          <BackButton />
+          <h1>{title}</h1>
+          <div>{rightButton}</div>
+        </div>
         {subHeader && (
           <div className='bg-white rounded-lg px-4 text-darkest-blue'>
             {subHeader}
@@ -29,10 +33,6 @@ export function TemplatePage({
         )}
         <div className='bg-white rounded-lg px-4 text-darkest-blue'>
           {children}
-        </div>
-        <div className='flex items-center justify-between'>
-          <BackButton />
-          {rightButton}
         </div>
       </div>
     </div>

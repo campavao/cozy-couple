@@ -8,7 +8,7 @@ async function Home() {
 
   return (
     <div className='flex flex-col justify-center items-center h-[90%] gap-8'>
-      <h1 className='font-bold text-lg'>Cozy Couple</h1>
+      <h1 className='font-bold text-lg'>FlipTrack</h1>
       {session ? (
         <div className='flex flex-col gap-4 text-center'>
           <Link href='/today'>Today</Link>

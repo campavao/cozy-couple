@@ -7,7 +7,7 @@ import "./globals.css";
 const font = Urbanist({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Cozy Couple",
+  title: "FlipTrack",
   description: "Management software for buying and selling couches",
 };
 
