@@ -14,6 +14,9 @@ export default async function InventoryItem({
   params: { id: string };
 }) {
   const pickup = await getPickup(params.id);
+  const link = pickup.link?.includes("http")
+    ? pickup.link
+    : "https://" + pickup.link;
 
   return (
     <TemplatePage
@@ -29,11 +32,7 @@ export default async function InventoryItem({
         <Address address={pickup.address} />
 
         {pickup.link && (
-          <a
-            href={"https://" + pickup.link}
-            target='_blank'
-            rel='noopener noreferrer'
-          >
+          <a href={link} target='_blank' rel='noopener noreferrer'>
             <strong>Link:</strong> {pickup.link ?? "None"}
           </a>
         )}
@@ -58,6 +57,11 @@ export default async function InventoryItem({
         {pickup.source && (
           <p>
             <strong>Source:</strong> {pickup.source}
+          </p>
+        )}
+        {pickup.paymentMethod && (
+          <p>
+            <strong>Payment Method:</strong> {pickup.paymentMethod}
           </p>
         )}
         <CouchDisplay couch={pickup.couch} />

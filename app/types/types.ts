@@ -25,6 +25,8 @@ export interface DeliveryUpload extends Delivery {
 
 export interface Inventory extends Common {
   displayName: string;
+  blemishes: string;
+  dateListed: string;
 }
 
 export interface Pickup extends Common {
@@ -36,6 +38,7 @@ export interface Pickup extends Common {
     to: string;
   };
   source: string;
+  paymentMethod: PaymentMethods;
 }
 
 export type UserId = string;
@@ -58,6 +61,16 @@ export const COUNT_TYPES = [
 
 type CouchType = typeof COUNT_TYPES;
 
+export const PAYMENT_METHOD_TYPES = [
+  "Cash",
+  "Card",
+  "Check",
+  "Venmo",
+  "Other",
+] as const;
+
+type PaymentMethods = typeof PAYMENT_METHOD_TYPES;
+
 interface DeliveryItem extends Delivery {
   type: "delivery";
 }
@@ -71,3 +84,13 @@ interface InventoryItem extends Inventory {
 }
 
 export type Item = DeliveryItem | PickupItem | InventoryItem;
+
+export const DAYS_OF_THE_WEEK = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];

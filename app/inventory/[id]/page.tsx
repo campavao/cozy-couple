@@ -5,6 +5,7 @@ import { CopyButton } from "../copy-button";
 import { ImageGallery } from "@/app/components/image-gallery";
 import { DeleteButton } from "../delete-button";
 import { CouchDisplay } from "@/app/components/couch-display";
+import { formatDateForInput } from "@/app/utils/utils";
 
 export default async function InventoryItem({
   params,
@@ -31,6 +32,15 @@ export default async function InventoryItem({
         <CopyButton text={item.description} />
         <p>
           <strong>Amount:</strong> ${item.amount ?? 0}
+        </p>
+        <p>
+          <strong>Blemishes:</strong> {item.blemishes}
+        </p>
+        <p>
+          <strong>Date Listed:</strong>{" "}
+          {item.dateListed != null && item.dateListed != ""
+            ? formatDateForInput(new Date(item.dateListed))
+            : "None"}
         </p>
         <CouchDisplay couch={item.couch} />
         {item.images?.length > 0 && (

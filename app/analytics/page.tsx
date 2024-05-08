@@ -21,7 +21,13 @@ import {
 } from "recharts";
 import { Chart } from "./chart";
 import { groupBy } from "lodash";
-import { Couch, Delivery, Item, Pickup } from "../types/types";
+import {
+  Couch,
+  DAYS_OF_THE_WEEK,
+  Delivery,
+  Item,
+  Pickup,
+} from "../types/types";
 
 export default async function Analytics() {
   const deliveries = await getDeliveries();
@@ -90,41 +96,41 @@ export default async function Analytics() {
             previousValue={pickupsLastMonth.length}
           />
           <TotalCard
-            title='Pickup Loss'
+            title='Pickup Cost'
             descriptor='$'
             value={getTotal(pickupsThisMonth, "amount")}
             previousValue={getTotal(pickupsLastMonth, "amount")}
           />
         </div>
         <div className='grid md:grid-cols-2 gap-4'>
-          <ChartCard
+          <DateCard
             title='Deliveries'
             list={deliveries}
             groupKey='deliveryDate'
             callback={(items) => items.length}
           />
-          <ChartCard
+          <DateCard
             title='Profit'
             list={deliveries}
             groupKey='deliveryDate'
             callback={(items) => getTotal<Delivery>(items, "amount")}
             format='$'
           />
-          <ChartCard
+          <DateCard
             title='Pickups'
             list={pickups}
             groupKey='pickupDate'
             callback={(items) => items.length}
           />
-          <ChartCard
-            title='Loss'
+          <DateCard
+            title='Cost'
             list={pickups}
             groupKey='pickupDate'
             callback={(items) => getTotal<Pickup>(items, "amount")}
             format='$'
           />
           <div className='md:col-span-2'>
-            <ChartCard
+            <DateCard
               title='Total Sales by Day of Week'
               list={deliveries}
               groupKey='deliveryDate'
@@ -132,8 +138,15 @@ export default async function Analytics() {
               monthFormat={{
                 weekday: "long",
               }}
+              sorter={DAYS_OF_THE_WEEK}
             />
           </div>
+          <SimpleCard
+            title='Channel'
+            list={deliveries}
+            groupKey='source'
+            callback={(items) => items.length}
+          />
           <h2 className='md:col-span-2'>Couch Sales</h2>
           <CouchCard
             title='Color'
@@ -153,6 +166,7 @@ export default async function Analytics() {
             groupKey='brand'
             callback={(items) => items.length}
           />
+
           <h2 className='md:col-span-2'>Couch Profit</h2>
           <CouchCard
             title='Color'
@@ -201,19 +215,48 @@ function TotalCard(props: {
         {value}
       </p>
       <sub className={change > 0 ? "text-green-900" : "text-red-900"}>
-        {change}% from last month
+        {change.toFixed(2)}% from last month
       </sub>
     </div>
   );
 }
 
-function ChartCard<T extends object>(props: {
+type SimpleListItem = {
+  value: string;
+  total: number;
+};
+
+function SimpleCard<T extends object>(props: {
+  title: string;
+  list: T[];
+  groupKey: keyof T;
+  callback: (items: T[]) => number;
+}) {
+  const { title, list, groupKey, callback } = props;
+
+  const byGroupKey = groupBy(list, (item) => item[groupKey]);
+
+  const data = Object.entries(byGroupKey).map(([value, item]) => ({
+    value: value,
+    total: callback(item),
+  }));
+
+  return (
+    <div className='rounded-lg border p-4 border-lightest-blue'>
+      <h3 className='pb-4'>{title}</h3>
+      <Chart<SimpleListItem> data={data} xKey='value' yKey='total' />
+    </div>
+  );
+}
+
+function DateCard<T extends object>(props: {
   title: string;
   list: T[];
   groupKey: keyof T;
   callback: (items: T[]) => number;
   format?: string;
   monthFormat?: Intl.DateTimeFormatOptions;
+  sorter?: string[];
 }) {
   const {
     title,
@@ -225,6 +268,7 @@ function ChartCard<T extends object>(props: {
       month: "long",
       year: "numeric",
     },
+    sorter,
   } = props;
 
   const byDate = groupBy(list, (item) => item[groupKey]);
@@ -235,13 +279,17 @@ function ChartCard<T extends object>(props: {
       : "Unknown"
   );
 
-  const monthOverMonthData = Object.entries(byMonth).map(([month, items]) => {
-    const flatItems = items.flatMap(([_, item]) => item).flat() as T[];
-    return {
-      month,
-      total: callback(flatItems),
-    };
-  });
+  const monthOverMonthData = Object.entries(byMonth)
+    .map(([month, items]) => {
+      const flatItems = items.flatMap(([_, item]) => item).flat() as T[];
+      return {
+        month,
+        total: callback(flatItems),
+      };
+    })
+    .sort((a, b) =>
+      sorter == null ? 1 : sorter.indexOf(a.month) - sorter.indexOf(b.month)
+    );
 
   return (
     <div className='rounded-lg border p-4 border-lightest-blue'>

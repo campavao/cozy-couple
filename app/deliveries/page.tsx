@@ -78,9 +78,12 @@ export default async function Deliveries() {
           >
             <div className='flex justify-between gap-4 mb-4'>
               <h2 className='border-b-2 border-b-lightest-blue'>{month}</h2>
-              <p>
-                {itemCount} {pluralize("item", itemCount)} - ${total}
-              </p>
+              <div className='flex flex-col gap-2 items-end'>
+                <p>
+                  {itemCount} {pluralize("item", itemCount)} - ${total}
+                </p>
+                <sub>Avg. ${(total / itemCount).toFixed(2)}</sub>
+              </div>
             </div>
             <div className='flex flex-col gap-6 items-start'>
               {dateValues.map(([date, deliveryItems], index) => (

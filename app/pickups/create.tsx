@@ -9,7 +9,7 @@ import {
   Sheet,
 } from "@/components/ui/sheet";
 import { FormEventHandler, useCallback, useState } from "react";
-import { Pickup } from "../types/types";
+import { PAYMENT_METHOD_TYPES, Pickup } from "../types/types";
 import { SubmitButton } from "../components/SubmitButton";
 import { formatDateForInput } from "../utils/utils";
 import { useRouter } from "next/navigation";
@@ -54,6 +54,7 @@ export function Create({
         description: data.description.value,
         amount: data.amount.value,
         source: data.source.value,
+        paymentMethod: data.paymentMethod.value,
         couch: getCouchValues(data),
       };
 
@@ -159,7 +160,13 @@ export function Create({
             <Input
               label='Source'
               name='source'
-              defaultValue='Facebook Marketplace'
+              defaultValue={existingPickup?.source}
+            />
+            <Select
+              label='Payment Method'
+              name='paymentMethod'
+              options={PAYMENT_METHOD_TYPES}
+              defaultValue={existingPickup?.paymentMethod}
             />
             <CouchForm couch={existingPickup?.couch} />
           </div>

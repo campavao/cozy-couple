@@ -16,6 +16,7 @@ import { CouchForm, getCouchValues } from "../components/couch-form";
 import { Input } from "../components/input";
 import { uploadImage } from "../utils/imageUtils";
 import { v4 as uuid } from "uuid";
+import { formatDateForInput } from "../utils/utils";
 
 interface Create {
   label?: string;
@@ -41,6 +42,8 @@ export function Create({ label = "Create", className, existingItem }: Create) {
         displayName: data.displayName.value,
         description: data.description.value,
         amount: data.amount.value,
+        blemishes: data.blemishes.value,
+        dateListed: data.dateListed.value,
         couch: getCouchValues(data),
       } satisfies Partial<Inventory>;
 
@@ -117,6 +120,19 @@ export function Create({ label = "Create", className, existingItem }: Create) {
               name='amount'
               type='number'
               defaultValue={existingItem?.amount}
+            />
+            <Input
+              label='Blemishes'
+              name='blemishes'
+              defaultValue={existingItem?.blemishes}
+            />
+            <Input
+              label='Date Listed'
+              name='dateListed'
+              type='date'
+              defaultValue={
+                existingItem?.dateListed ?? formatDateForInput(new Date())
+              }
             />
             <CouchForm couch={existingItem?.couch} />
           </div>
