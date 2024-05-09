@@ -4,7 +4,7 @@ import { TemplatePage } from "../components/template-page";
 import { Create } from "./create";
 import { Inventory } from "../types/types";
 import { LoadingIcon } from "../components/image";
-import { formatDate, isVideo, pluralize } from "../utils/utils";
+import { formatDate, getTotal, isVideo, pluralize } from "../utils/utils";
 import { parseISO } from "date-fns";
 import { groupBy } from "lodash";
 
@@ -39,6 +39,7 @@ export default async function InventoryPage() {
   return (
     <TemplatePage title='Inventory' rightButton={<Create />}>
       {Object.entries(byMonth).map(([month, dateValues], index) => {
+        const total = getTotal<Inventory>(dateValues, "amount");
         const itemCount = dateValues.flatMap(([_, dels]) => dels).length;
 
         return (
@@ -48,9 +49,12 @@ export default async function InventoryPage() {
           >
             <div className='flex justify-between gap-4 mb-4'>
               <h2 className='border-b-2 border-b-lightest-blue'>{month}</h2>
-              <p>
-                {itemCount} {pluralize("item", itemCount)}
-              </p>
+              <div className='flex flex-col gap-2 items-end'>
+                <p>
+                  {itemCount} {pluralize("item", itemCount)} - ${total}
+                </p>
+                <sub>Avg. ${(total / itemCount).toFixed(2)}</sub>
+              </div>
             </div>
             <div className='flex flex-col gap-6 items-start'>
               {dateValues.map(([date, items], index) => {
@@ -95,8 +99,11 @@ function Display({ item }: { item: Inventory }) {
           }}
         />
       )}
-      <div className='flex flex-col gap-1 text-left'>
-        {item.displayName}, {item?.couch?.type}
+      <div className='flex gap-1 text-left'>
+        <strong>${item.amount}</strong>
+        {item?.blemishes !== ""
+          ? item.blemishes
+          : item?.couch?.type ?? "Unknown"}
       </div>
     </Link>
   );
