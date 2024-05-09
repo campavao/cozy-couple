@@ -8,11 +8,10 @@ import {
 } from "firebase/storage";
 import "jimp";
 import firebase_app from "../api/firebase/firebase.config";
-import { compressVideo } from "../api/apiUtils";
 import { isVideo } from "./utils";
-const { Jimp } = window as any;
 
 export async function uploadImage(image: File, itemId: string) {
+  const { Jimp } = window as any;
   const storage = getStorage(firebase_app);
   const file = await image.arrayBuffer();
   const storageRef = ref(storage, `images/${itemId}/${image.name}`);

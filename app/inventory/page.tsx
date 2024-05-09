@@ -99,11 +99,14 @@ function Display({ item }: { item: Inventory }) {
           }}
         />
       )}
-      <div className='flex gap-1 text-left'>
-        <strong>${item.amount}</strong>
-        {item?.blemishes !== ""
-          ? item.blemishes
-          : item?.couch?.type ?? "Unknown"}
+      <div className='flex flex-col'>
+        <p>{item.displayName}</p>
+        <p className='flex gap-1'>
+          <strong>${item.amount}</strong>
+          {item?.blemishes !== ""
+            ? item.blemishes
+            : item?.couch?.type ?? "Unknown"}
+        </p>
       </div>
     </Link>
   );
