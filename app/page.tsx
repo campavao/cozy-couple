@@ -3,9 +3,11 @@ import { authOptions } from "./api/auth";
 import { getServerSession } from "next-auth/next";
 import { Login } from "./components/Login";
 import { Button } from "@/components/ui/button";
+import { isUserSubscribed } from "./api/apiUtils";
 
 async function Home() {
   const session = await getServerSession(authOptions);
+  const isSubscribed = await isUserSubscribed();
 
   return (
     <div className='flex flex-col justify-center items-center h-[90%] gap-8'>
@@ -17,7 +19,7 @@ async function Home() {
           <Link href='/inventory'>Inventory</Link>
           <Link href='/pickups'>Pickups</Link>
           <Link href='/analytics'>Analytics</Link>
-          <Link href='/subscription'>Subscribe</Link>
+          {!isSubscribed && <Link href='/subscription'>Subscribe</Link>}
           <Login isSignout />
         </div>
       ) : (

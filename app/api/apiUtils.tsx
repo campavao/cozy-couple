@@ -190,3 +190,13 @@ export async function compressVideo(video: File, storageRef: StorageReference) {
     return url;
   });
 }
+
+export async function isUserSubscribed() {
+  const userId = await getUserId();
+  const user = await getDocument("users", userId);
+  if (!user.exists()) {
+    return false;
+  }
+
+  return user.data().isPremium;
+}
