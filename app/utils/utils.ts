@@ -8,6 +8,7 @@ import {
 } from "firebase/storage";
 import { Delivery, Item, Pickup } from "../types/types";
 import { parseISO } from "date-fns";
+import { redirect } from "next/navigation";
 
 export function formatDate(date: Date) {
   const number = date.toLocaleDateString("default", {
@@ -189,3 +190,14 @@ export function isVideo(url: string) {
   const type = fileType(url);
   return type === "quicktime" || type === "mp4";
 }
+
+export const getClientUserId = async () => {
+  try {
+    const response = await fetch("/api/user");
+    const data = await response.json();
+    return data.id;
+  } catch (err) {
+    console.error(err);
+    redirect("/");
+  }
+};

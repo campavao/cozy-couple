@@ -2,6 +2,7 @@ import Link from "next/link";
 import { authOptions } from "./api/auth";
 import { getServerSession } from "next-auth/next";
 import { Login } from "./components/Login";
+import { Button } from "@/components/ui/button";
 
 async function Home() {
   const session = await getServerSession(authOptions);
@@ -16,6 +17,7 @@ async function Home() {
           <Link href='/inventory'>Inventory</Link>
           <Link href='/pickups'>Pickups</Link>
           <Link href='/analytics'>Analytics</Link>
+          <Link href='/subscription'>Subscribe</Link>
           <Login isSignout />
         </div>
       ) : (
