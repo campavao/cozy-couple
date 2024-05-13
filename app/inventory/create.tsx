@@ -69,7 +69,7 @@ export function Create({ label = "Create", className, existingItem }: Create) {
           toaster.toast({
             variant: "destructive",
             title: "Image/video failed to upload",
-            description: "Cannot upload images/videos larger than 10mb",
+            description: "Cannot upload images/videos larger than 20mb",
           });
         }
       }

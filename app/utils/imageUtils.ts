@@ -10,8 +10,7 @@ import "jimp";
 import firebase_app from "../api/firebase/firebase.config";
 import { isVideo } from "./utils";
 
-const TEN_MEGABITS = 10000000;
-// const TEN_MEGABITS = 100;
+const TEN_MEGABITS = 20000000;
 
 export async function uploadImage(image: File, itemId: string) {
   const { Jimp } = window as any;
