@@ -115,7 +115,12 @@ function Display({ pickup }: { pickup: Pickup }) {
           }}
         />
       )}
-      <span>{pickup.address}</span>
+      <div className='flex flex-col gap-1 text-left'>
+        <div className='flex md:flex-row flex-col underline'>
+          {pickup.pickupWindow.from} - {pickup.pickupWindow.to}
+        </div>
+        <div>{pickup.address}</div>
+      </div>
     </Link>
   );
 }

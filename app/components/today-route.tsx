@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { Delivery, Pickup } from "../types/types";
-import { isiOS } from "../utils/utils";
 import { RouteIcon } from "lucide-react";
 
 export function TodayRoute<T extends Delivery | Pickup>({
@@ -33,17 +32,42 @@ export function TodayRoute<T extends Delivery | Pickup>({
   );
 }
 
+function isiOS() {
+  if (!navigator) {
+    return false;
+  }
+
+  return (
+    [
+      "iPad Simulator",
+      "iPhone Simulator",
+      "iPod Simulator",
+      "iPad",
+      "iPhone",
+      "iPod",
+    ].includes(navigator.platform) ||
+    // iPad on iOS 13 detection
+    (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+  );
+}
+
 export function Address({ address }: { address: string }) {
-  const addressUrl = useMemo(() => {
-    if (isiOS()) {
-      return `maps://?q${address}`;
-    } else {
-      return `https://www.google.com/maps/dir/Current+Location/${address}`;
+  const [routeUrl, setRouteUrl] = useState<string>();
+  useEffect(() => {
+    if (navigator) {
+      if (isiOS()) {
+        setRouteUrl(`maps://?q${address}`);
+      } else {
+        setRouteUrl(
+          `https://www.google.com/maps/dir/Current+Location/${address}`
+        );
+      }
     }
   }, [address]);
+
   return (
     <p>
-      <strong>Address:</strong> <a href={addressUrl}>{address}</a>
+      <strong>Address:</strong> <a href={routeUrl}>{address}</a>
     </p>
   );
 }

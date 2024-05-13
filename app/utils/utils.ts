@@ -43,9 +43,9 @@ export function formatDateForInput(date: Date) {
   return date.toISOString().split("T")[0];
 }
 
-export async function deleteImage(name: string) {
+export async function deleteImage(ids: string) {
   const storage = getStorage(firebase_app);
-  const storageRef = ref(storage, `images/${name}`);
+  const storageRef = ref(storage, `images/${ids}`);
   await deleteObject(storageRef);
 }
 
@@ -141,21 +141,6 @@ function isArrayOfT<T>(item: any): item is T[] {
   return Array.isArray(item) && item.every((x: any) => typeof x === "number");
 }
 
-export function isiOS() {
-  return (
-    [
-      "iPad Simulator",
-      "iPhone Simulator",
-      "iPod Simulator",
-      "iPad",
-      "iPhone",
-      "iPod",
-    ].includes(navigator.platform) ||
-    // iPad on iOS 13 detection
-    (navigator.userAgent.includes("Mac") && "ontouchend" in document)
-  );
-}
-
 export function pluralize(word: string, count: number) {
   return count > 1 ? word + "s" : word;
 }
@@ -163,7 +148,7 @@ export function pluralize(word: string, count: number) {
 export function getUrlBase(item: Item) {
   switch (item.type) {
     case "delivery":
-      return "deliveries";
+      return "delivery";
     case "pickup":
       return "pickups";
     default:

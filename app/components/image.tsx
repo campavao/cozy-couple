@@ -45,7 +45,7 @@ export function LoadingImage({
       setDeleteLoading(true);
 
       try {
-        await fetch(`/api/images/${id}`, {
+        await fetch(`/api/images/${item.id}/${id}`, {
           method: "DELETE",
         });
       } catch (err) {
@@ -56,6 +56,8 @@ export function LoadingImage({
           ...omit(item, "type"),
           images: item.images.filter((src) => src !== props.src),
         };
+
+
 
         await fetch(`/api/${urlBase}`, {
           method: "POST",
@@ -74,8 +76,7 @@ export function LoadingImage({
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger className={containerClassName}>
         {loading && <Spinner className='absolute top-1/2 left-1/2' />}
-        {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image {...props} onLoad={() => setLoading(false)} priority />
+        <Image {...props} alt='' onLoad={() => setLoading(false)} priority />
       </DialogTrigger>
       <DialogContent className='max-h-[90%] flex flex-col justify-center items-center'>
         <a
@@ -85,9 +86,9 @@ export function LoadingImage({
           rel='noopener noreferrer'
         >
           {loading && <Spinner className='absolute top-1/2 left-1/2' />}
-          {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Image
             {...props}
+            alt=''
             className='md:max-h-none max-h-[500px] object-contain'
             onLoad={() => setLoading(false)}
           />
