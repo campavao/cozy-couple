@@ -2,7 +2,6 @@ import Link from "next/link";
 import { authOptions } from "./api/auth";
 import { getServerSession } from "next-auth/next";
 import { Login } from "./components/Login";
-import { Button } from "@/components/ui/button";
 import { isUserSubscribed } from "./api/apiUtils";
 
 async function Home() {

@@ -16,8 +16,8 @@ import { v4 as uuid } from "uuid";
 import { startOfToday } from "date-fns";
 import { formatDateForInput } from "../utils/utils";
 
-import Ffmpeg from "fluent-ffmpeg";
-import { PassThrough, Readable } from "stream";
+// import Ffmpeg from "fluent-ffmpeg";
+// import { PassThrough, Readable } from "stream";
 import {
   getDownloadURL,
   StorageReference,
@@ -172,24 +172,24 @@ export function getRandomId() {
   return uuid();
 }
 
-export async function compressVideo(video: File, storageRef: StorageReference) {
-  const file = await video.arrayBuffer();
-  let bufferStream = new PassThrough();
-  const readable = new Readable();
-  readable.push(file);
-  const command = Ffmpeg(readable);
-  command.fps(30).addOptions(["-crf 28"]).writeToStream(bufferStream);
-  const buffers: Buffer[] = [];
-  bufferStream.on("data", function (buf) {
-    buffers.push(buf);
-  });
-  bufferStream.on("end", async () => {
-    const outputBuffer = Buffer.concat(buffers);
-    await uploadBytes(storageRef, outputBuffer);
-    const url = await getDownloadURL(storageRef);
-    return url;
-  });
-}
+// export async function compressVideo(video: File, storageRef: StorageReference) {
+//   const file = await video.arrayBuffer();
+//   let bufferStream = new PassThrough();
+//   const readable = new Readable();
+//   readable.push(file);
+//   const command = Ffmpeg(readable);
+//   command.fps(30).addOptions(["-crf 28"]).writeToStream(bufferStream);
+//   const buffers: Buffer[] = [];
+//   bufferStream.on("data", function (buf) {
+//     buffers.push(buf);
+//   });
+//   bufferStream.on("end", async () => {
+//     const outputBuffer = Buffer.concat(buffers);
+//     await uploadBytes(storageRef, outputBuffer);
+//     const url = await getDownloadURL(storageRef);
+//     return url;
+//   });
+// }
 
 export async function isUserSubscribed() {
   const userId = await getUserId();
