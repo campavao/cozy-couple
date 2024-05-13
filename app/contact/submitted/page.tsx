@@ -1,4 +1,3 @@
-import { BackButton } from "@/app/components/BackButton";
 import { TemplatePage } from "@/app/components/template-page";
 import { constants } from "@/app/constants";
 import Link from "next/link";
