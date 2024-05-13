@@ -121,19 +121,19 @@ export const getTodaysItems = cache(
 export async function upsertDelivery(delivery: Partial<DeliveryUpload>) {
   const userId = await getUserId();
   const id = delivery?.id ?? getRandomId();
-  await upsertDocument("deliveries", id, { ...delivery, userId });
+  await upsertDocument("deliveries", { ...delivery, userId }, id);
 }
 
 export async function upsertInventory(inventory: Partial<Inventory>) {
   const userId = await getUserId();
   const id = inventory.id ?? getRandomId();
-  await upsertDocument("inventory", id, { ...inventory, userId });
+  await upsertDocument("inventory", { ...inventory, userId }, id);
 }
 
 export async function upsertPickup(pickup: Partial<Pickup>) {
   const userId = await getUserId();
   const id = pickup.id ?? getRandomId();
-  await upsertDocument("pickups", id, { ...pickup, userId });
+  await upsertDocument("pickups", { ...pickup, userId }, id);
 }
 
 // UPSERTERS

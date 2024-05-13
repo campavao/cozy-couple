@@ -92,7 +92,7 @@ const onCheckoutComplete = async (
       );
     }
 
-    await upsertDocument("checkout_sessions", stripeId, event);
+    await upsertDocument("checkout_sessions", event, stripeId);
 
     if (userId) {
       await updateDocument("users", userId, {

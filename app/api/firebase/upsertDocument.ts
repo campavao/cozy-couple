@@ -5,19 +5,27 @@ import {
   setDoc,
   PartialWithFieldValue,
   deleteDoc,
+  addDoc,
+  collection,
+  DocumentData,
 } from "firebase/firestore";
 
 const db = getFirestore(firebase_app);
 
 export async function upsertDocument<T extends object>(
-  collection: string,
-  id: string,
-  data: PartialWithFieldValue<T>
+  table: string,
+  data: PartialWithFieldValue<T>,
+  id?: string
 ): Promise<void> {
   try {
-    await setDoc(doc(db, collection, id), data, {
-      merge: true,
-    });
+    if (!id) {
+      const ref = collection(db, table);
+      await addDoc<DocumentData, DocumentData>(ref, data);
+    } else {
+      await setDoc(doc(db, table, id), data, {
+        merge: true,
+      });
+    }
   } catch (e: any) {
     throw new Error(e);
   }

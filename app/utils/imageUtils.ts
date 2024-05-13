@@ -10,6 +10,9 @@ import "jimp";
 import firebase_app from "../api/firebase/firebase.config";
 import { isVideo } from "./utils";
 
+const TEN_MEGABITS = 10000000;
+// const TEN_MEGABITS = 100;
+
 export async function uploadImage(image: File, itemId: string) {
   const { Jimp } = window as any;
   const storage = getStorage(firebase_app);
@@ -18,6 +21,9 @@ export async function uploadImage(image: File, itemId: string) {
 
   if (isVideo(image.type)) {
     // await compressVideo(image, storageRef);
+    if (image.size > TEN_MEGABITS) {
+      throw new Error("Too large");
+    }
     await uploadBytes(storageRef, image);
   } else {
     const smallerImage = await Jimp.read(Buffer.from(file)).then((img: any) => {

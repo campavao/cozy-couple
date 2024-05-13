@@ -19,6 +19,7 @@ async function Home() {
           <Link href='/inventory'>Inventory</Link>
           <Link href='/pickups'>Pickups</Link>
           <Link href='/analytics'>Analytics</Link>
+          <Link href='/contact'>Contact</Link>
           {!isSubscribed && <Link href='/subscription'>Subscribe</Link>}
           <Login isSignout />
         </div>

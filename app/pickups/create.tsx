@@ -19,6 +19,7 @@ import { CouchForm, getCouchValues } from "../components/couch-form";
 import { uploadImage } from "../utils/imageUtils";
 import { v4 as uuid } from "uuid";
 import { EditIcon, PlusIcon } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 interface Create {
   label?: string;
   className?: string;
@@ -33,6 +34,7 @@ export function Create({
   const [open, setOpen] = useState<boolean>();
   const [loading, setLoading] = useState<boolean>();
   const router = useRouter();
+  const toaster = useToast();
 
   const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     async (e) => {
@@ -61,12 +63,25 @@ export function Create({
       const files = Array.from(data.images.files);
 
       if (files.length > 0) {
-        const urls = await Promise.all(
+        const rawUrls = await Promise.allSettled(
           files.map((file) => uploadImage(file as File, id))
         );
+
+        const urls = rawUrls
+          .map((url) => (url.status === "fulfilled" ? url.value : undefined))
+          .filter((url): url is string => url != null);
+
         const previousUrls = structuredClone(existingPickup?.images ?? []);
         const uniqueUrls = new Set([...previousUrls, ...urls]);
         pickup.images = Array.from(uniqueUrls);
+
+        if (urls.length !== files.length) {
+          toaster.toast({
+            variant: "destructive",
+            title: "Image/video failed to upload",
+            description: "Cannot upload images/videos larger than 10mb",
+          });
+        }
       }
 
       try {
@@ -81,7 +96,7 @@ export function Create({
         setLoading(false);
       }
     },
-    [existingPickup, router]
+    [existingPickup, router, toaster]
   );
 
   const Icon = label === "Create" ? PlusIcon : EditIcon;

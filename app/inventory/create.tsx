@@ -18,6 +18,7 @@ import { uploadImage } from "../utils/imageUtils";
 import { v4 as uuid } from "uuid";
 import { formatDateForInput } from "../utils/utils";
 import { PlusIcon, EditIcon } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface Create {
   label?: string;
@@ -29,6 +30,7 @@ export function Create({ label = "Create", className, existingItem }: Create) {
   const [open, setOpen] = useState<boolean>();
   const [loading, setLoading] = useState<boolean>();
   const router = useRouter();
+  const toaster = useToast();
 
   const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     async (e) => {
@@ -51,12 +53,25 @@ export function Create({ label = "Create", className, existingItem }: Create) {
       const files = Array.from(data.images.files);
 
       if (files.length > 0) {
-        const urls = await Promise.all(
+        const rawUrls = await Promise.allSettled(
           files.map((file) => uploadImage(file as File, id))
         );
-        const previousUrls = structuredClone(existingItem?.images ?? []);
+
+        const urls = rawUrls
+          .map((url) => (url.status === "fulfilled" ? url.value : undefined))
+          .filter((url): url is string => url != null);
+
+        const previousUrls = structuredClone(item?.images ?? []);
         const uniqueUrls = new Set([...previousUrls, ...urls]);
         item.images = Array.from(uniqueUrls);
+
+        if (urls.length !== files.length) {
+          toaster.toast({
+            variant: "destructive",
+            title: "Image/video failed to upload",
+            description: "Cannot upload images/videos larger than 10mb",
+          });
+        }
       }
 
       try {
@@ -71,7 +86,7 @@ export function Create({ label = "Create", className, existingItem }: Create) {
         setLoading(false);
       }
     },
-    [existingItem, router]
+    [existingItem, router, toaster]
   );
 
   const Icon = label === "Create" ? PlusIcon : EditIcon;
