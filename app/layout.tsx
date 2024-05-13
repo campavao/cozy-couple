@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from "@vercel/analytics/react";
 
 import { Urbanist } from "next/font/google";
 
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 
 const font = Urbanist({ weight: "400", subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default async function RootLayout({
       <body className={font.className}>
         <main className='sm:m-8 m-4'>{children}</main>
         <Toaster />
+        <Analytics />
       </body>
     </html>
   );
