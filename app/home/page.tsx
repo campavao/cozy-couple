@@ -1,13 +1,14 @@
 import { BoxesIcon, LineChart, RouteIcon, TruckIcon } from "lucide-react";
 import { ReactNode } from "react";
 import { Login } from "../components/Login";
-import { getUserId } from "../api/apiUtils";
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth";
 
 export default async function Home() {
-  const userId = await getUserId();
+  const session = await getServerSession(authOptions);
 
-  if (userId) {
+  if (session) {
     redirect("/");
   }
 
