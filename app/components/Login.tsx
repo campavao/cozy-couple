@@ -2,7 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { signIn, signOut } from "next-auth/react";
 
-export function Login({ isSignout }: { isSignout?: boolean }) {
+export function Login({
+  isSignout,
+  signInText = "Login",
+}: {
+  isSignout?: boolean;
+  signInText?: string;
+}) {
   const handleLogin = async () => {
     if (isSignout) {
       await signOut();
@@ -12,6 +18,8 @@ export function Login({ isSignout }: { isSignout?: boolean }) {
   };
 
   return (
-    <Button onClick={handleLogin}>{isSignout ? "Sign out" : "Login"}</Button>
+    <Button variant='default' onClick={handleLogin}>
+      {isSignout ? "Sign out" : signInText}
+    </Button>
   );
 }
