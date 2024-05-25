@@ -1,14 +1,17 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import { signIn, signOut } from "next-auth/react";
+import { RefAttributes } from "react";
 
 export function Login({
   isSignout,
   signInText = "Login",
+  variant = "default",
 }: {
   isSignout?: boolean;
   signInText?: string;
-}) {
+} & ButtonProps &
+  RefAttributes<HTMLButtonElement>) {
   const handleLogin = async () => {
     if (isSignout) {
       await signOut();
@@ -18,7 +21,7 @@ export function Login({
   };
 
   return (
-    <Button variant='default' onClick={handleLogin}>
+    <Button variant={variant} onClick={handleLogin}>
       {isSignout ? "Sign out" : signInText}
     </Button>
   );

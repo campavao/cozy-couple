@@ -23,11 +23,13 @@ export default async function TodayPage() {
   return (
     <TemplatePage title='Today' rightButton={<TodayRoute items={list} />}>
       {list.length === 0 && <div className='p-4'>Nothing today</div>}
-      <div className='flex flex-col gap-4 items-start py-4'>
-        {list.map((item) => (
-          <Display item={item} key={item.id} />
-        ))}
-      </div>
+      {list.length > 0 && (
+        <div className='flex flex-col gap-4 items-start py-4'>
+          {list.map((item) => (
+            <Display item={item} key={item.id} />
+          ))}
+        </div>
+      )}
     </TemplatePage>
   );
 }
@@ -76,7 +78,7 @@ function Display({ item }: { item: TodayItem }) {
   );
 }
 
-export const sortByTime = (itemA: TodayItem, itemB: TodayItem) => {
+const sortByTime = (itemA: TodayItem, itemB: TodayItem) => {
   const a = itemA.type === "delivery" ? itemA.deliveryDate : itemA.pickupDate;
   const b = itemB.type === "delivery" ? itemB.deliveryDate : itemB.pickupDate;
 

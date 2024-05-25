@@ -15,11 +15,11 @@ export default async function Home() {
   return (
     <div className='flex flex-col items-center gap-8'>
       <div className='flex flex-col gap-4 items-center'>
-        <h1 className='text-[120px]'>FlipTrack</h1>
+        <h1 className='text-[80px] md:text-[120px]'>FlipTrack</h1>
         <p className='text-[20px]'>Couch reselling made easy</p>
-        <Login signInText='Get Started for Free' />
+        <Login variant='secondary' signInText='Get Started for Free' />
       </div>
-      <div className='flex gap-8'>
+      <div className='flex flex-col md:flex-row gap-8'>
         <IconCard
           icon={<TruckIcon size={90} />}
           title='Organize Deliveries and Pickups'
@@ -74,9 +74,7 @@ export default async function Home() {
       <div className='border w-20'></div>
       <div className='bg-lightest-blue text-darkest-blue rounded-md p-4 flex flex-col items-center gap-4'>
         <h2>Sign up for FlipTrack today and start saving time and money!</h2>
-        <div className='w-28'>
-          <Login signInText='Sign up' />
-        </div>
+        <Login signInText='Sign up' />
       </div>
       <Footer />
     </div>
@@ -93,10 +91,10 @@ function IconCard({
   description: string;
 }) {
   return (
-    <div className='flex flex-col w-48 items-center text-center rounded-lg border-lightest-blue border-2 shadow-md shadow-darker-blue hover:shadow-lg'>
+    <div className='flex flex-col w-72 md:w-48 items-center text-center rounded-lg border-lightest-blue border-2 shadow-md shadow-darker-blue hover:shadow-lg'>
       <div className='flex items-center h-48'>{icon}</div>
       <div className='flex flex-col gap-4 bg-lightest-blue text-darkest-blue p-4 h-full'>
-        <strong className='h-12'>{title}</strong>
+        <strong className='md:h-12'>{title}</strong>
         <div>{description}</div>
       </div>
     </div>
@@ -123,7 +121,7 @@ function HowItWorksCard({
 
 function Footer() {
   return (
-    <div className='flex gap-4'>
+    <div className='flex flex-wrap justify-center gap-4'>
       <a href='/home'>Home</a>
       <a href='/pricing'>Pricing</a>
       <a href='/contact'>Contact Us</a>
