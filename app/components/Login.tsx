@@ -7,6 +7,7 @@ export function Login({
   isSignout,
   signInText = "Login",
   variant = "default",
+  ...rest
 }: {
   isSignout?: boolean;
   signInText?: string;
@@ -21,7 +22,7 @@ export function Login({
   };
 
   return (
-    <Button variant={variant} onClick={handleLogin}>
+    <Button {...rest} onClick={handleLogin}>
       {isSignout ? "Sign out" : signInText}
     </Button>
   );
