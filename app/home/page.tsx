@@ -71,8 +71,8 @@ export default async function Home() {
       {/* <div>
         <h2>Testimonials</h2>
         <div></div>
-      </div> */}
-      <div className='border w-20'></div>
+      </div>
+      <div className='border w-20'></div> */}
       <div className='bg-lightest-blue text-darkest-blue rounded-md p-4 flex flex-col items-center gap-4'>
         <h2>Sign up for FlipTrack today and start saving time and money!</h2>
         <Login signInText='Sign up' />

@@ -24,7 +24,7 @@ export default async function RootLayout({
       <body
         className={`${font.className} bg-gradient-to-b from-darkest-blue to-darker-blue min-h-screen relative`}
       >
-        <main className='sm:mb-0 sm:m-8 m-4 mb-0 min-h-[80vh]'>{children}</main>
+        <main className='sm:pb-0 sm:p-8 p-4 pb-0 min-h-[80vh]'>{children}</main>
         <Footer />
         <Toaster />
         <Analytics />
