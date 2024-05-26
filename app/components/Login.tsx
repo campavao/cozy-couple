@@ -6,7 +6,6 @@ import { RefAttributes } from "react";
 export function Login({
   isSignout,
   signInText = "Login",
-  variant = "default",
   ...rest
 }: {
   isSignout?: boolean;
