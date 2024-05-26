@@ -6,18 +6,18 @@ import * as sg from "@sendgrid/mail";
 import { constants } from "../constants";
 import { SubmitButton } from "../components/SubmitButton";
 import { upsertDocument } from "../api/firebase/upsertDocument";
-import { getUserId } from "../api/apiUtils";
+import { getMaybeUserId } from "../api/apiUtils";
 import { RedirectType, redirect } from "next/navigation";
 
 sg.setApiKey(process.env.SENDGRID_API_KEY ?? "");
 
 export default async function ContactForm() {
-  const userId = await getUserId();
+  const userId = await getMaybeUserId();
   async function onFormSubmit(formData: FormData) {
     "use server";
 
     const rawFormData: Nullable<ContactForm> = {
-      userId,
+      userId: userId ?? "Unknown",
       submitted: new Date(),
       name: formData.get("name") as string,
       email: formData.get("email") as string,

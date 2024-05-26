@@ -18,11 +18,11 @@ import { formatDateForInput } from "../utils/utils";
 
 // import Ffmpeg from "fluent-ffmpeg";
 // import { PassThrough, Readable } from "stream";
-import {
-  getDownloadURL,
-  StorageReference,
-  uploadBytes,
-} from "firebase/storage";
+// import {
+//   getDownloadURL,
+//   StorageReference,
+//   uploadBytes,
+// } from "firebase/storage";
 
 export const getUserId = cache(async (): Promise<UserId> => {
   const session = await getServerSession(authOptions);
@@ -31,6 +31,13 @@ export const getUserId = cache(async (): Promise<UserId> => {
   if (userId == null) {
     redirect("/");
   }
+
+  return userId;
+});
+
+export const getMaybeUserId = cache(async (): Promise<UserId | undefined> => {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
 
   return userId;
 });
