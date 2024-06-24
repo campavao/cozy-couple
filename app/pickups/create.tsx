@@ -58,6 +58,11 @@ export function Create({
         source: data.source.value,
         paymentMethod: data.paymentMethod.value,
         couch: getCouchValues(data),
+        updatedAt: new Date(),
+        createdAt:
+          existingPickup?.id != null
+            ? existingPickup?.createdAt ?? new Date()
+            : new Date(),
       };
 
       const files = Array.from(data.images.files);

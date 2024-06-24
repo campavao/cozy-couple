@@ -97,7 +97,7 @@ export default async function Pickups() {
 }
 
 function Display({ pickup }: { pickup: Pickup }) {
-  const firstImage = pickup.images.find((img) => !isVideo(img));
+  const firstImage = pickup.images?.find((img) => !isVideo(img));
 
   return (
     <Link href={`/pickups/${pickup.id}`} className='flex gap-3'>

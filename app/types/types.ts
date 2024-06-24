@@ -5,6 +5,8 @@ interface Common {
   images: string[];
   userId: string;
   couch: Couch;
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export interface Delivery extends Common {

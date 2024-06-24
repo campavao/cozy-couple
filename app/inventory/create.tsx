@@ -48,6 +48,11 @@ export function Create({ label = "Create", className, existingItem }: Create) {
         blemishes: data.blemishes.value,
         dateListed: data.dateListed.value,
         couch: getCouchValues(data),
+        updatedAt: new Date(),
+        createdAt:
+          existingItem?.id != null
+            ? existingItem?.createdAt ?? new Date()
+            : new Date(),
       } satisfies Partial<Inventory>;
 
       const files = Array.from(data.images.files);
