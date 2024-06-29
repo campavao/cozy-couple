@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth";
 import { Footer } from "../components/Footer";
+import Image from "next/image";
+import adamImg from "../adam.jpg";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -68,11 +70,29 @@ export default async function Home() {
       </div>
       <div className='border w-20'></div>
 
-      {/* <div>
+      <div className='flex flex-col items-center gap-4'>
         <h2>Testimonials</h2>
-        <div></div>
+        <div>
+          <div className='flex items-center border border-white rounded-md p-4 flex-col sm:flex-row sm:w-[500px] sm:gap-4'>
+            <Image
+              className='rounded-full shadow-flat'
+              src={adamImg}
+              alt=''
+              width={150}
+              height={150}
+            />
+            <blockquote className='flex flex-col justify-evenly h-[150px]'>
+              &quot;It&apos;s made my business so much more efficient. It&apos;s
+              completely streamlined all of my logistics&quot;
+              <br />
+              <span>
+                <strong>Adam Ascensao</strong> Cozy Couple
+              </span>
+            </blockquote>
+          </div>
+        </div>
       </div>
-      <div className='border w-20'></div> */}
+      <div className='border w-20'></div>
       <div className='bg-lightest-blue text-darkest-blue rounded-md p-4 flex flex-col items-center gap-4'>
         <h2>Sign up for FlipTrack today and start saving time and money!</h2>
         <Login signInText='Sign up' />
