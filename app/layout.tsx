@@ -12,6 +12,7 @@ const font = Urbanist({ weight: "400", subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "FlipTrack",
   description: "Management software for buying and selling couches",
+  metadataBase: new URL("https://fliptrack.app"),
 };
 
 export default async function RootLayout({
