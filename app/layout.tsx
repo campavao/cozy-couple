@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
+import { Footer } from "./components/Footer";
 
 import { Urbanist } from "next/font/google";
 
 import "./globals.css";
-import { Footer } from "./components/Footer";
 
 const font = Urbanist({ weight: "400", subsets: ["latin"] });
 
