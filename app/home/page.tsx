@@ -83,7 +83,7 @@ export default async function Home() {
             />
             <blockquote className='flex flex-col justify-evenly h-[150px]'>
               &quot;It&apos;s made my business so much more efficient. It&apos;s
-              completely streamlined all of my logistics&quot;
+              completely streamlined all of my logistics.&quot;
               <br />
               <span>
                 <strong>Adam Ascensao</strong> Cozy Couple
