@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
           }
         );
       }
+      return NextResponse.json({ message: "Checkout session completed and saved" }, { status: 200 });
     }
     // case "customer.subscription.updated": {
     //   const savedSession = await onUpdateSubscription(event);
@@ -62,6 +63,7 @@ export async function POST(req: NextRequest) {
           }
         );
       }
+      return NextResponse.json({ message: "Customer subscription deleted successfully" }, { status: 200 });
     }
     default:
       console.warn(`Handled event type ${event.type}`);
