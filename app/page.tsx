@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth/next";
 import { Login } from "./components/Login";
 import { isUserSubscribed } from "./api/apiUtils";
 import { redirect } from "next/navigation";
+import { constants } from "./constants";
 
 async function Home() {
   const session = await getServerSession(authOptions);
@@ -28,7 +29,11 @@ async function Home() {
         <Link href='/pickups'>Pickups</Link>
         <Link href='/analytics'>Analytics</Link>
         <Link href='/contact'>Contact</Link>
-        {!isSubscribed && <Link href='/subscription'>Subscribe</Link>}
+        {!isSubscribed ? (
+          <Link href='/subscription'>Subscribe</Link>
+        ) : (
+          <a href={constants.manageSubscription}>Manage subscription</a>
+        )}
         <Login isSignout />
       </div>
     </div>
