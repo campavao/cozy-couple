@@ -97,6 +97,7 @@ export default async function Home() {
         <h2>Sign up for FlipTrack today and start saving time and money!</h2>
         <Login signInText='Sign up' />
       </div>
+      <Footer isHome />
     </div>
   );
 }
@@ -138,4 +139,3 @@ function HowItWorksCard({
     </div>
   );
 }
-
