@@ -9,10 +9,10 @@ import { constants } from "./constants";
 async function Home() {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    console.log("user is not signed in, redirecting home");
-    redirect("/home");
-  }
+  // if (!session) {
+  //   console.log("user is not signed in, redirecting home");
+  //   redirect("/home");
+  // }
 
   const isSubscribed = await isUserSubscribed();
 
