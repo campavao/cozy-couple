@@ -17,7 +17,11 @@ async function Home() {
   const isSubscribed = await isUserSubscribed();
 
   if (!isSubscribed && process.env.SUBSCRIBE_STATUS === "force") {
-    redirect("/subscription");
+    if (isSubscribed == null) {
+      redirect("/subscription");
+    } else {
+      redirect("/profile");
+    }
   }
 
   return (

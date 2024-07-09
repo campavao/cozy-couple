@@ -36,7 +36,10 @@ export async function POST(req: NextRequest) {
           }
         );
       }
-      return NextResponse.json({ message: "Checkout session completed and saved" }, { status: 200 });
+      return NextResponse.json(
+        { message: "Checkout session completed and saved" },
+        { status: 200 }
+      );
     }
     // case "customer.subscription.updated": {
     //   const savedSession = await onUpdateSubscription(event);
@@ -51,6 +54,7 @@ export async function POST(req: NextRequest) {
     //     );
     //   }
     // }
+    case "invoice.payment_failed":
     case "customer.subscription.deleted": {
       const savedSession = await onDeleteSubscription(event);
       if (!savedSession) {
@@ -63,7 +67,10 @@ export async function POST(req: NextRequest) {
           }
         );
       }
-      return NextResponse.json({ message: "Customer subscription deleted successfully" }, { status: 200 });
+      return NextResponse.json(
+        { message: "Customer subscription deleted successfully" },
+        { status: 200 }
+      );
     }
     default:
       console.warn(`Handled event type ${event.type}`);
@@ -150,6 +157,7 @@ const onDeleteSubscription = async (
     | Stripe.CheckoutSessionCompletedEvent
     | Stripe.CustomerSubscriptionDeletedEvent
     | Stripe.CustomerSubscriptionUpdatedEvent
+    | Stripe.InvoicePaymentFailedEvent
 ) => {
   const subscriptionId = event.data.object.id;
   const [user] = await getDocuments<User>("users", [

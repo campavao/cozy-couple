@@ -1,26 +1,26 @@
 import { BoxesIcon, LineChart, RouteIcon, TruckIcon } from "lucide-react";
 import { ReactNode } from "react";
 import { Login } from "../components/Login";
-import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth";
 import { Footer } from "../components/Footer";
 import Image from "next/image";
 import adamImg from "../adam.jpg";
+import { SignInButton } from "./SignInButton";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-
-  if (session) {
-    redirect("/");
-  }
 
   return (
     <div className='flex flex-col items-center gap-8'>
       <div className='flex flex-col gap-4 items-center'>
         <h1 className='text-[80px] md:text-[120px]'>FlipTrack</h1>
         <p className='text-[20px]'>Couch reselling made easy</p>
-        <Login variant='secondary' signInText='Get Started for Free' />
+        {session ? (
+          <SignInButton variant='secondary' />
+        ) : (
+          <Login variant='secondary' signInText='Get Started for Free' />
+        )}
       </div>
       <div className='flex flex-col md:flex-row gap-8'>
         <IconCard
@@ -95,7 +95,7 @@ export default async function Home() {
       <div className='border w-20'></div>
       <div className='bg-lightest-blue text-darkest-blue rounded-md p-4 flex flex-col items-center gap-4'>
         <h2>Sign up for FlipTrack today and start saving time and money!</h2>
-        <Login signInText='Sign up' />
+        {session ? <SignInButton /> : <Login signInText='Sign up' />}
       </div>
       <Footer isHome />
     </div>
