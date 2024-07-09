@@ -8,12 +8,13 @@ import {
   getTotal,
   pluralize,
   sortByDeliveryTime,
-  isVideo
+  isVideo,
 } from "../utils/utils";
 import { Create } from "./create";
 import groupBy from "lodash/groupBy";
 import { isToday, parseISO } from "date-fns";
 import { TodayRoute } from "../components/today-route";
+import { ItemDisplay } from "../components/ItemDisplay";
 
 export default async function Deliveries() {
   const deliveries = await getDeliveries();
@@ -85,15 +86,33 @@ export default async function Deliveries() {
                 <sub>Avg. ${(total / itemCount).toFixed(2)}</sub>
               </div>
             </div>
-            <div className='flex flex-col gap-6 items-start'>
+            <div className='flex flex-col gap-6 items-start w-full'>
               {dateValues.map(([date, deliveryItems], index) => (
-                <div key={date + index}>
+                <div key={date + index} className='w-full'>
                   <h3 className='font-bold'>{formatDate(new Date(date))}</h3>
-                  <div className='flex flex-col gap-4'>
+                  <div className='flex flex-col gap-4 w-full'>
                     {deliveryItems
                       .sort(sortByDeliveryTime)
                       .map((delivery, dIndex) => (
-                        <Display delivery={delivery} key={index + dIndex} />
+                        <ItemDisplay
+                          item={{ ...delivery, type: "delivery" }}
+                          key={`${index}-${dIndex}`}
+                          rows={[
+                            {
+                              type: "timewindow",
+                              value: `${delivery.deliveryWindow.from} - ${delivery.deliveryWindow.to}`,
+                            },
+                            {
+                              type: "address",
+                              value: delivery.address,
+                            },
+                            {
+                              type: "person",
+                              value: delivery.name,
+                            },
+                          ]}
+                          description={delivery.description}
+                        />
                       ))}
                   </div>
                 </div>

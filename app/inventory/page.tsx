@@ -69,13 +69,21 @@ export default async function InventoryPage() {
                         <ItemDisplay
                           item={{ ...item, type: "inventory" }}
                           key={`${key}-${dIndex}`}
-                          options={{
-                            displayName: item.displayName,
-                            description:
-                              item?.blemishes !== ""
-                                ? item.blemishes
-                                : item?.couch?.type ?? "Unknown",
-                          }}
+                          rows={[
+                            {
+                              type: "couch",
+                              value: item.displayName,
+                            },
+                            {
+                              type: "amount",
+                              value: item.amount,
+                            },
+                          ]}
+                          description={
+                            item?.blemishes !== ""
+                              ? item.blemishes
+                              : item?.couch?.type ?? "Unknown"
+                          }
                         />
                       ))}
                     </div>
