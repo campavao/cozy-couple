@@ -95,15 +95,18 @@ const onCheckoutComplete = async (
     const userId =
       event.type === "checkout.session.completed"
         ? event.data.object.client_reference_id
-        : typeof event.data.object.customer === "string"
-        ? event.data.object.customer
-        : event.data.object.customer?.id;
+        : null;
 
     const stripeEmail =
       event.data.object.customer_email ??
       (event.type === "checkout.session.completed"
         ? event.data.object.customer_details?.email
         : event.data.object.customer_email);
+
+    const customerId =
+      typeof event.data.object.customer === "string"
+        ? event.data.object.customer
+        : event.data.object.customer?.id;
 
     if (!stripeSubscriptionId) {
       return NextResponse.json(
@@ -120,8 +123,31 @@ const onCheckoutComplete = async (
       await updateDocument("users", userId, {
         isPremium: true,
         stripeId: stripeSubscriptionId,
+        customerId: customerId,
       });
       return true;
+    }
+
+    if (customerId) {
+      const [user] = await getDocuments<User>("users", [
+        {
+          fieldPath: "customerId",
+          opStr: "==",
+          value: customerId,
+        },
+      ]);
+
+      if (user?.id) {
+        await updateDocument("users", user.id, {
+          isPremium: true,
+          stripeId: stripeSubscriptionId,
+          customerId: customerId,
+        });
+
+        return true;
+      } else {
+        console.error("couldnt find user for customerId", customerId);
+      }
     }
 
     if (stripeEmail) {
@@ -137,7 +163,9 @@ const onCheckoutComplete = async (
         await updateDocument("users", user.id, {
           isPremium: true,
           stripeId: stripeSubscriptionId,
+          customerId: customerId,
         });
+
         return true;
       } else {
         console.error("couldnt find user for email", stripeEmail);
@@ -146,10 +174,11 @@ const onCheckoutComplete = async (
       console.error("no email found for session, creating");
     }
 
-    console.error(
-      "error fufilling orders for",
-      JSON.stringify(event.data.object)
-    );
+    if (customerId)
+      console.error(
+        "error fufilling orders for",
+        JSON.stringify(event.data.object)
+      );
     return false;
   } catch (err) {
     console.error("error onCheckoutComplete", err);
@@ -173,7 +202,7 @@ const onDeleteSubscription = async (
     | Stripe.InvoicePaymentFailedEvent
 ) => {
   const subscriptionId = event.data.object.id;
-  const [user] = await getDocuments<User>("users", [
+  let [user] = await getDocuments<User>("users", [
     {
       fieldPath: "stripeId",
       opStr: "==",
@@ -182,8 +211,34 @@ const onDeleteSubscription = async (
   ]);
 
   if (!user?.id) {
-    console.error("No user found for subscription ID", subscriptionId);
-    return false;
+    console.error(
+      "No user found for subscription ID, trying customerId",
+      subscriptionId
+    );
+    const customerId =
+      typeof event.data.object.customer === "string"
+        ? event.data.object.customer
+        : event.data.object.customer?.id;
+
+    if (!customerId) {
+      console.error("No customer ID found");
+      return false;
+    }
+
+    const [customerUser] = await getDocuments<User>("users", [
+      {
+        fieldPath: "customerId",
+        opStr: "==",
+        value: customerId,
+      },
+    ]);
+
+    if (!customerUser) {
+      console.error("No customer found for customerId", customerId);
+      return false;
+    }
+
+    user = customerUser;
   }
 
   await updateDocument("users", user.id, {
