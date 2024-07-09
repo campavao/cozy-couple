@@ -33,6 +33,8 @@ export const authOptions: AuthOptions = {
   },
   session: {
     strategy: "jwt",
+    // Set a reasonable session duration, e.g., 30 days
+    maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
   },
   pages: {
     signIn: "/",

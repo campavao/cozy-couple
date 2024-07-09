@@ -5,13 +5,12 @@ import { Login } from "./components/Login";
 import { isUserSubscribed } from "./api/apiUtils";
 import { redirect } from "next/navigation";
 import { constants } from "./constants";
-import { Footer } from "./components/Footer";
-import { MobileMenu } from "./components/mobile-menu/MobileMenu";
 
 async function Home() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
+    console.log("user is not signed in, redirecting home");
     redirect("/home");
   }
 
