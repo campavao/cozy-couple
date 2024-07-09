@@ -29,7 +29,7 @@ export const getUserId = cache(async (): Promise<UserId> => {
   const userId = session?.user?.id;
 
   if (userId == null) {
-    redirect("/");
+    redirect("/home");
   }
 
   return userId;
@@ -199,10 +199,15 @@ export function getRandomId() {
 // }
 
 export async function isUserSubscribed() {
-  const userId = await getUserId();
+  const userId = await getMaybeUserId();
+
+  if (!userId) {
+    return undefined;
+  }
+
   const user = await getDocument("users", userId);
   if (!user.exists()) {
-    return false;
+    return undefined;
   }
 
   return user.data().isPremium;
