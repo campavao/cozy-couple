@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
   }
 
   switch (event.type) {
+    case "invoice.payment_succeeded":
     case "checkout.session.completed": {
       const savedSession = await onCheckoutComplete(event);
       if (!savedSession) {
@@ -79,7 +80,9 @@ export async function POST(req: NextRequest) {
 }
 
 const onCheckoutComplete = async (
-  event: Stripe.CheckoutSessionCompletedEvent
+  event:
+    | Stripe.CheckoutSessionCompletedEvent
+    | Stripe.InvoicePaymentSucceededEvent
 ) => {
   try {
     const stripeId = event.id;
@@ -89,10 +92,18 @@ const onCheckoutComplete = async (
         ? stripeSubscriptionIdRaw
         : stripeSubscriptionIdRaw?.id;
 
-    const userId = event.data.object.client_reference_id;
+    const userId =
+      event.type === "checkout.session.completed"
+        ? event.data.object.client_reference_id
+        : typeof event.data.object.customer === "string"
+        ? event.data.object.customer
+        : event.data.object.customer?.id;
+
     const stripeEmail =
       event.data.object.customer_email ??
-      event.data.object.customer_details?.email;
+      (event.type === "checkout.session.completed"
+        ? event.data.object.customer_details?.email
+        : event.data.object.customer_email);
 
     if (!stripeSubscriptionId) {
       return NextResponse.json(
@@ -101,7 +112,9 @@ const onCheckoutComplete = async (
       );
     }
 
-    await upsertDocument("checkout_sessions", event, stripeId);
+    await upsertDocument<
+      Stripe.CheckoutSessionCompletedEvent | Stripe.InvoicePaymentSucceededEvent
+    >("checkout_sessions", event, stripeId);
 
     if (userId) {
       await updateDocument("users", userId, {

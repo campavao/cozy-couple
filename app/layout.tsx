@@ -5,6 +5,7 @@ import { Footer } from "./components/Footer";
 import { MobileMenu } from "./components/mobile-menu/MobileMenu";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Urbanist } from "next/font/google";
+import { isUserSubscribed } from "./api/apiUtils";
 
 import "./globals.css";
 
@@ -21,6 +22,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const isSubscribed = await isUserSubscribed();
   return (
     <html lang='en'>
       <body
@@ -30,9 +32,7 @@ export default async function RootLayout({
         <div className='hidden sm:block'>
           <Footer />
         </div>
-        <div className='block sm:hidden'>
-          <MobileMenu />
-        </div>
+        <div className='block sm:hidden'>{isSubscribed && <MobileMenu />}</div>
         <Toaster />
         <Analytics />
         <SpeedInsights />
