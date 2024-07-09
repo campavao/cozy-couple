@@ -1,12 +1,11 @@
-import Link from "next/link";
 import { getInventory } from "../api/apiUtils";
 import { TemplatePage } from "../components/template-page";
 import { Create } from "./create";
 import { Inventory } from "../types/types";
-import { LoadingIcon } from "../components/image";
-import { formatDate, getTotal, isVideo, pluralize } from "../utils/utils";
+import { formatAmount, formatDate, getTotal, pluralize } from "../utils/utils";
 import { parseISO } from "date-fns";
 import { groupBy } from "lodash";
+import { ItemDisplay } from "../components/ItemDisplay";
 
 export default async function InventoryPage() {
   const inventoryItems = await getInventory();
@@ -51,22 +50,33 @@ export default async function InventoryPage() {
               <h2 className='border-b-2 border-b-lightest-blue'>{month}</h2>
               <div className='flex flex-col gap-2 items-end'>
                 <p>
-                  {itemCount} {pluralize("item", itemCount)} - ${total}
+                  {itemCount} {pluralize("item", itemCount)} - $
+                  {formatAmount(total)}
                 </p>
-                <sub>Avg. ${(total / itemCount).toFixed(2)}</sub>
+                <sub>Avg. ${formatAmount(total / itemCount)}</sub>
               </div>
             </div>
-            <div className='flex flex-col gap-6 items-start'>
+            <div className='flex flex-col gap-6 items-start w-full'>
               {dateValues.map(([date, items], index) => {
                 const key = `${date}-${index}`;
                 return (
-                  <div key={key}>
+                  <div key={key} className='w-full'>
                     <h3 className='font-bold'>
                       {date !== "Unknown" ? formatDate(new Date(date)) : date}
                     </h3>
-                    <div className='flex flex-col gap-4'>
+                    <div className='flex flex-col gap-4 w-full overflow-hidden'>
                       {items.map((item, dIndex) => (
-                        <Display item={item} key={`${key}-${dIndex}`} />
+                        <ItemDisplay
+                          item={{ ...item, type: "inventory" }}
+                          key={`${key}-${dIndex}`}
+                          options={{
+                            displayName: item.displayName,
+                            description:
+                              item?.blemishes !== ""
+                                ? item.blemishes
+                                : item?.couch?.type ?? "Unknown",
+                          }}
+                        />
                       ))}
                     </div>
                   </div>
@@ -77,37 +87,5 @@ export default async function InventoryPage() {
         );
       })}
     </TemplatePage>
-  );
-}
-
-function Display({ item }: { item: Inventory }) {
-  const firstImage = item.images?.find((img) => !isVideo(img));
-
-  return (
-    <Link href={`/inventory/${item.id}`} className='flex gap-2'>
-      {firstImage && (
-        <LoadingIcon
-          containerClassName='w-12 h-full rounded-lg overflow-hidden'
-          className='w-full h-full rounded-lg object-center object-cover'
-          src={firstImage}
-          alt=''
-          width={100}
-          height={100}
-          item={{
-            ...item,
-            type: "inventory",
-          }}
-        />
-      )}
-      <div className='flex flex-col'>
-        <p>{item.displayName}</p>
-        <p className='flex gap-1'>
-          <strong>${item.amount}</strong>
-          {item?.blemishes !== ""
-            ? item.blemishes
-            : item?.couch?.type ?? "Unknown"}
-        </p>
-      </div>
-    </Link>
   );
 }

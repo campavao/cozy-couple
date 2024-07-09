@@ -61,7 +61,7 @@ export const COUNT_TYPES = [
   "Patio Set",
 ] as const;
 
-type CouchType = typeof COUNT_TYPES;
+type CouchType = (typeof COUNT_TYPES)[number];
 
 export const PAYMENT_METHOD_TYPES = [
   "Cash",

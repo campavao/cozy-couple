@@ -25,6 +25,13 @@ export function formatDate(date: Date) {
   return `${number}${ordinal} ${dayOfWeek}`;
 }
 
+export function formatAmount(amount: number) {
+  return Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(amount);
+}
+
 const nthNumber = (number: number) => {
   if (number > 3 && number < 21) return "th";
   switch (number % 10) {

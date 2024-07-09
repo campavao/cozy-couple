@@ -112,7 +112,6 @@ export function LoadingIcon({ containerClassName, ...props }: LoadingImage) {
   return (
     <div className='relative w-[50px] h-[50px] rounded-xl'>
       {loading && <Spinner className='absolute w-[25px] h-[25px] top-1/2' />}
-      {/* eslint-disable-next-line jsx-a11y/alt-text */}
       <Image
         alt=''
         style={{

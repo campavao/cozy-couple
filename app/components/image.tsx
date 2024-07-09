@@ -57,8 +57,6 @@ export function LoadingImage({
           images: item.images.filter((src) => src !== props.src),
         };
 
-
-
         await fetch(`/api/${urlBase}`, {
           method: "POST",
           body: JSON.stringify(updatedItem),
@@ -76,7 +74,13 @@ export function LoadingImage({
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger className={containerClassName}>
         {loading && <Spinner className='absolute top-1/2 left-1/2' />}
-        <Image {...props} alt='' onLoad={() => setLoading(false)} priority />
+        <Image
+          {...props}
+          alt=''
+          onLoad={() => setLoading(false)}
+          priority
+          loading='eager'
+        />
       </DialogTrigger>
       <DialogContent className='max-h-[90%] flex flex-col justify-center items-center'>
         <a
@@ -91,6 +95,7 @@ export function LoadingImage({
             alt=''
             className='md:max-h-none max-h-[500px] object-contain'
             onLoad={() => setLoading(false)}
+            loading='lazy'
           />
         </a>
         <DialogFooter>
@@ -111,10 +116,12 @@ export function LoadingIcon({ containerClassName, ...props }: LoadingImage) {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div className='relative w-[50px] h-[50px] rounded-xl'>
+    <div
+      className={`relative w-[50px] h-[50px] rounded-xl ${containerClassName}`}
+    >
       {loading && <Spinner className='absolute w-[25px] h-[25px] top-1/2' />}
-      {/* eslint-disable-next-line jsx-a11y/alt-text */}
       <Image
+        {...props}
         alt=''
         style={{
           objectFit: "cover",
@@ -122,7 +129,6 @@ export function LoadingIcon({ containerClassName, ...props }: LoadingImage) {
           visibility: loading ? "hidden" : "visible",
         }}
         className='rounded-xl'
-        src={props.src}
         width={50}
         height={50}
         onLoad={() => setLoading(false)}
