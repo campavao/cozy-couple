@@ -10,7 +10,7 @@ export default async function SubscriptionPage() {
   const userId = await getMaybeUserId();
 
   return (
-    <TemplatePage title='Subscribe'>
+    <TemplatePage isWhiteBg title='Subscribe'>
       <div className='p-4 flex flex-col gap-4'>
         <h2>Manage your couch flipping business with ease!</h2>
         <p>

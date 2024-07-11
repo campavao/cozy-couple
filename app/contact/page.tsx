@@ -48,7 +48,7 @@ export default async function ContactForm() {
     redirect("/contact/submitted", RedirectType.replace);
   }
   return (
-    <TemplatePage title='Contact us'>
+    <TemplatePage isWhiteBg title='Contact us'>
       <form action={onFormSubmit} className='py-4 flex flex-col gap-4'>
         <Input label='Name' name='name' required />
         <Input label='Email' name='email' type='email' required />
