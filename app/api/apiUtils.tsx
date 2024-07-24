@@ -198,17 +198,19 @@ export function getRandomId() {
 //   });
 // }
 
-export async function isUserSubscribed() {
-  const userId = await getMaybeUserId();
+export const isUserSubscribed = cache(
+  async (): Promise<boolean | undefined> => {
+    const userId = await getMaybeUserId();
 
-  if (!userId) {
-    return undefined;
+    if (!userId) {
+      return undefined;
+    }
+
+    const user = await getDocument("users", userId);
+    if (!user.exists()) {
+      return undefined;
+    }
+
+    return user.data().isPremium;
   }
-
-  const user = await getDocument("users", userId);
-  if (!user.exists()) {
-    return undefined;
-  }
-
-  return user.data().isPremium;
-}
+);
