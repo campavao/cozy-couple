@@ -9,7 +9,7 @@ export default async function Profile() {
   const isSubscribed = await isUserSubscribed();
 
   return (
-    <TemplatePage title='Profile'>
+    <TemplatePage isWhiteBg title='Profile'>
       <div className='w-full flex flex-col gap-4 justify-center items-center pt-4'>
         {isSubscribed == null ? (
           <Link href='/subscription'>Subscribe</Link>

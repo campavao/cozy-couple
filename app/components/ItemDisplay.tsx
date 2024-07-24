@@ -25,22 +25,38 @@ export const ItemDisplay = ({
   description: string;
 }) => {
   const firstImage = item.images?.find((img) => !isVideo(img));
-  const base = item.type === "delivery" ? "deliveries" : item.type;
+  const base =
+    item.type === "delivery"
+      ? "deliveries"
+      : item.type === "pickup"
+      ? "pickups"
+      : item.type;
 
   return (
-    <Link href={`/${base}/${item.id}`} className='flex flex-col gap w-full'>
-      <div className='flex gap-2 w-full'>
+    <Link
+      href={`/${base}/${item.id}`}
+      className='flex flex-col gap-2 w-full p-2 rounded-lg bg-slate-100 text-black overflow-x-hidden'
+    >
+      <div className='flex gap-2 w-full items-start'>
         {firstImage ? (
           <LoadingIcon
-            containerClassName='w-12 h-full rounded-lg overflow-hidden shrink-0'
+            containerClassName='w-12 h-full rounded-lg overflow-hidden shrink-0 shadow-flat'
             className='w-full h-full rounded-lg object-center object-cover'
             src={firstImage}
             alt=''
             item={item}
             loading='lazy'
+            width={48}
+            height={40}
           />
         ) : (
-          <Image src={placeholder} alt='' width={50} height={50} />
+          <Image
+            src={placeholder}
+            alt=''
+            width={48}
+            height={40}
+            className='rounded-lg shadow-flat'
+          />
         )}
         <div className='flex flex-col'>
           {rows.map((row, index) => (
@@ -116,4 +132,4 @@ interface StringRow {
   value: string;
 }
 
-type DisplayRow = MoneyRow | StringRow;
+export type DisplayRow = MoneyRow | StringRow;

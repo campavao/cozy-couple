@@ -74,7 +74,7 @@ export default async function Analytics() {
   );
 
   return (
-    <TemplatePage title='Analytics' isWide>
+    <TemplatePage isWhiteBg title='Analytics' isWide>
       <div className='flex flex-col gap-4 py-4'>
         <div className='grid md:grid-cols-4 gap-4'>
           <TotalCard

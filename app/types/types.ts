@@ -73,15 +73,15 @@ export const PAYMENT_METHOD_TYPES = [
 
 type PaymentMethods = typeof PAYMENT_METHOD_TYPES;
 
-interface DeliveryItem extends Delivery {
+export interface DeliveryItem extends Delivery {
   type: "delivery";
 }
 
-interface PickupItem extends Pickup {
+export interface PickupItem extends Pickup {
   type: "pickup";
 }
 
-interface InventoryItem extends Inventory {
+export interface InventoryItem extends Inventory {
   type: "inventory";
 }
 
