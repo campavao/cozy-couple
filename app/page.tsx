@@ -1,15 +1,13 @@
 import Link from "next/link";
-import { authOptions } from "./api/auth";
-import { getServerSession } from "next-auth/next";
 import { Login } from "./components/Login";
-import { isUserSubscribed } from "./api/apiUtils";
+import { getMaybeUserId, isUserSubscribed } from "./api/apiUtils";
 import { redirect } from "next/navigation";
 import { constants } from "./constants";
 
 async function Home() {
-  const session = await getServerSession(authOptions);
+  const userId = await getMaybeUserId();
 
-  if (!session) {
+  if (!userId) {
     console.log("user is not signed in, redirecting home");
     redirect("/home");
   }
