@@ -3,11 +3,11 @@ import { TemplatePage } from "../components/template-page";
 import { Textarea } from "../components/textarea";
 
 import * as sg from "@sendgrid/mail";
-import { constants } from "../constants";
-import { SubmitButton } from "../components/SubmitButton";
-import { upsertDocument } from "../api/firebase/upsertDocument";
-import { getMaybeUserId } from "../api/apiUtils";
 import { RedirectType, redirect } from "next/navigation";
+import { getMaybeUserId } from "../api/apiUtils";
+import { upsertDocument } from "../api/firebase/upsertDocument";
+import { SubmitButton } from "../components/SubmitButton";
+import { constants } from "../constants";
 
 sg.setApiKey(process.env.SENDGRID_API_KEY ?? "");
 
@@ -15,6 +15,13 @@ export default async function ContactForm() {
   const userId = await getMaybeUserId();
   async function onFormSubmit(formData: FormData) {
     "use server";
+
+    const isBot = formData.get("is-bot") === "on";
+
+    if (isBot) {
+      console.log("Bot detected");
+      return;
+    }
 
     const rawFormData: Nullable<ContactForm> = {
       userId: userId ?? "Unknown",
@@ -25,13 +32,13 @@ export default async function ContactForm() {
       text: formData.get("info") as string,
     };
 
-    await upsertDocument("contact", rawFormData);
-
     if (isValid(rawFormData)) {
+      await upsertDocument("contact", rawFormData);
+
       try {
         await sg.send({
           to: constants.supportEmail,
-          from: constants.supportEmail,
+          from: rawFormData.email,
           subject: `FlipTrack Support - ${rawFormData.subject}`,
           text: `
           ${rawFormData.text}
@@ -53,6 +60,7 @@ export default async function ContactForm() {
         <Input label='Name' name='name' required />
         <Input label='Email' name='email' type='email' required />
         <Input label='Topic' required name='topic' />
+        <input name='is-bot' type='checkbox' className='hidden' />
         <Textarea
           label='Describe your issue'
           required
