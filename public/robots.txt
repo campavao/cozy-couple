@@ -1,0 +1,12 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+Allow: /home
+Allow: /contact
+Allow: /tos
+
+# Disallow API routes
+Disallow: /api/
+
+# Add sitemap location (uncomment if you have a sitemap)
+# Sitemap: https://fliptrack.app/sitemap.xml
