@@ -38,7 +38,8 @@ export default async function ContactForm() {
       try {
         await sg.send({
           to: constants.supportEmail,
-          from: rawFormData.email,
+          from: constants.supportEmail,
+          replyTo: rawFormData.email,
           subject: `FlipTrack Support - ${rawFormData.subject}`,
           text: `
           ${rawFormData.text}
@@ -48,7 +49,10 @@ export default async function ContactForm() {
           `,
         });
       } catch (err) {
-        console.warn("Sendgrid failed: ", err);
+        console.warn("Sendgrid failed: ", {
+          error: err,
+          body: (err as any)?.response?.body?.errors,
+        });
       }
     }
 
