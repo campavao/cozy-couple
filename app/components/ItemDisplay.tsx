@@ -1,8 +1,3 @@
-import Link from "next/link";
-import { Item } from "../types/types";
-import { formatAmount, isVideo } from "../utils/utils";
-import { LoadingIcon } from "./image";
-import { useMemo } from "react";
 import {
   CarIcon,
   Clock4Icon,
@@ -12,8 +7,13 @@ import {
   SofaIcon,
   UserRoundSearchIcon,
 } from "lucide-react";
-import placeholder from "../public/sofa-placeholder.jpg";
 import Image from "next/image";
+import Link from "next/link";
+import { useMemo } from "react";
+import placeholder from "../public/sofa-placeholder.jpg";
+import { Item } from "../types/types";
+import { formatAmount, isVideo } from "../utils/utils";
+import { LoadingIcon } from "./image";
 
 export const ItemDisplay = ({
   item,
@@ -48,6 +48,7 @@ export const ItemDisplay = ({
             loading='lazy'
             width={48}
             height={40}
+            unoptimized
           />
         ) : (
           <Image
@@ -56,6 +57,8 @@ export const ItemDisplay = ({
             width={48}
             height={40}
             className='rounded-lg shadow-flat'
+            loading='lazy'
+            unoptimized
           />
         )}
         <div className='flex flex-col'>

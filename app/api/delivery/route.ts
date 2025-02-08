@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   } catch (err) {
     return new NextResponse("Error", { status: 403 });
   }
-
+  
   revalidatePath("/deliveries");
 
   return new NextResponse("Success", { status: 200 });

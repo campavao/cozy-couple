@@ -1,19 +1,19 @@
 "use client";
-import { useCallback, useState } from "react";
-import Spinner from "./Spinner";
-import Image from "next/image";
-import { ImageProps } from "next/dist/shared/lib/get-img-props";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogFooter,
+  DialogTrigger,
 } from "@/components/ui/dialog";
+import omit from "lodash/omit";
+import { ImageProps } from "next/dist/shared/lib/get-img-props";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { SubmitButton } from "./SubmitButton";
+import { useCallback, useState } from "react";
 import { Item } from "../types/types";
 import { getUrlBase } from "../utils/utils";
-import omit from "lodash/omit";
+import Spinner from "./Spinner";
+import { SubmitButton } from "./SubmitButton";
 
 interface LoadingImage extends ImageProps {
   containerClassName?: string;
@@ -80,6 +80,7 @@ export function LoadingImage({
           onLoad={() => setLoading(false)}
           priority
           loading='eager'
+          unoptimized
         />
       </DialogTrigger>
       <DialogContent className='max-h-[90%] flex flex-col justify-center items-center'>
@@ -96,6 +97,7 @@ export function LoadingImage({
             className='md:max-h-none max-h-[500px] object-contain'
             onLoad={() => setLoading(false)}
             loading='lazy'
+            unoptimized
           />
         </a>
         <DialogFooter>
@@ -123,6 +125,7 @@ export function LoadingIcon({ containerClassName, ...props }: LoadingImage) {
       <Image
         {...props}
         alt=''
+        unoptimized
         style={{
           objectFit: "cover",
           height: "50px",

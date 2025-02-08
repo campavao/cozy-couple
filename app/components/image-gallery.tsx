@@ -1,5 +1,5 @@
 import { Item } from "../types/types";
-import { isVideo, fileType } from "../utils/utils";
+import { fileType, isVideo } from "../utils/utils";
 import { LoadingImage } from "./image";
 
 export function ImageGallery({ urls, item }: { urls: string[]; item: Item }) {
@@ -24,6 +24,7 @@ export function ImageGallery({ urls, item }: { urls: string[]; item: Item }) {
             alt=''
             width={300}
             height={500}
+            loading='lazy'
             key={index}
             item={item}
           />

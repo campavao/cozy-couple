@@ -1,19 +1,19 @@
 "use client";
-import { useCallback, useState } from "react";
-import Spinner from "./Spinner";
-import Image from "next/image";
-import { ImageProps } from "next/dist/shared/lib/get-img-props";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogFooter,
+  DialogTrigger,
 } from "@/components/ui/dialog";
+import omit from "lodash/omit";
+import { ImageProps } from "next/dist/shared/lib/get-img-props";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { SubmitButton } from "./SubmitButton";
+import { useCallback, useState } from "react";
 import { Item } from "../types/types";
 import { fileType, getUrlBase } from "../utils/utils";
-import omit from "lodash/omit";
+import Spinner from "./Spinner";
+import { SubmitButton } from "./SubmitButton";
 
 interface LoadingImage extends ImageProps {
   containerClassName?: string;
@@ -123,6 +123,8 @@ export function LoadingIcon({ containerClassName, ...props }: LoadingImage) {
         src={props.src}
         width={50}
         height={50}
+        loading='lazy'
+        unoptimized
         onLoad={() => setLoading(false)}
       />
     </div>
